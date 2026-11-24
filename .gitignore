@@ -1,3 +1,2 @@
-*.part
-*.json
+src/backup/
 .DS_Store
