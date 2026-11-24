@@ -112,7 +112,7 @@ const JP={q:['1Q26','2Q26','3Q26','4Q26E','2027E(회사)'],v:[0,5,7,10,100]};
 
 const PEERS=[{"t": "GRAL", "n": "Grail", "cur": "USD", "px": 103.55, "mc": 4655833088, "rev": 166604000, "rg": 0.037, "opm": -3.32038, "gm": 0.46679002, "ps": 27.945505, "ni": -406177984, "y52": -0.10906643, "name": "GRAIL, Inc."}, {"t": "GH", "n": "Guardant Health", "cur": "USD", "px": 154.17, "mc": 20857036800, "rev": 1278883968, "rg": 0.361, "opm": -0.39403, "gm": 0.65190005, "ps": 16.308779, "ni": -485072992, "y52": 0.31083143, "name": "Guardant Health, Inc."}, {"t": "NTRA", "n": "Natera", "cur": "USD", "px": 292.39, "mc": 42397876224, "rev": 2908875008, "rg": 0.341, "opm": -0.085360005, "gm": 0.65142995, "ps": 14.575352, "ni": -164714000, "y52": 0.14594686, "name": "Natera, Inc."}, {"t": "394800.KQ", "n": "쓰리빌리언", "cur": "KRW", "px": 6140.0, "mc": 195390472192, "rev": 9783881728, "rg": 1.025, "opm": -0.71685, "gm": 1.0, "ps": 19.97065, "ni": -5966963712, "y52": -0.45327103, "name": "3billion, Inc."}, {"t": "228760.KQ", "n": "지노믹트리", "cur": "KRW", "px": 8070.0, "mc": 198078119936, "rev": 2946381056, "rg": -0.511, "opm": -3.9839802, "gm": -0.0558, "ps": 67.2276, "ni": -9026676736, "y52": -0.6745417, "name": "Genomictree Inc."}, {"t": "461030.KQ", "n": "아이엠비디엑스", "cur": "KRW", "px": 2120.0, "mc": 30389176320, "rev": 5599463424, "rg": -0.0, "opm": -1.5375, "gm": 0.28047, "ps": 5.427159, "ni": -7588599808, "y52": -0.77558637, "name": "IMB Dx, Inc."}, {"t": "340450.KQ", "n": "지씨지놈", "cur": "KRW", "px": 7740.0, "mc": 183057137664, "rev": 32637421568, "rg": 0.062, "opm": 0.04737, "gm": 0.46627998, "ps": 5.6088114, "ni": 5415054848, "y52": 0.1942215, "name": "GC Genome Corporation"}];
 /* ---------- 탭 ---------- */
-const PAGES=[['sum','요약'],['fin','실적'],['kpi','성장 지표'],['tech','기술 이해'],['peer','글로벌 비교'],['us','미국·일본'],['reg','허가·로열티'],['val','밸류'],['px','주가'],['pitch','5분 피칭'],['qa','예상 질의'],['src','출처']];
+const PAGES=[['sum','요약'],['fin','실적'],['kpi','성장 지표'],['tech','기술 이해'],['peer','글로벌 비교'],['us','미국·일본'],['reg','허가·로열티'],['dream','꿈의 지도'],['val','밸류'],['px','주가'],['pitch','5분 피칭'],['qa','예상 질의'],['src','출처']];
 let charts=[];
 function nav(){const h=(location.hash||'#sum').slice(1);document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===h));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.p===h));window.scrollTo(0,0);draw(h)}
 function card(h,cap,body){return `<div class="card"><h2>${h}</h2>${cap?`<p class="cap">${cap}</p>`:''}${body}</div>`}
@@ -230,7 +230,7 @@ function build(){
 
  /* 허가·로열티 */
  H+=`<section class="page" id="reg"><div class="page-head"><h1>미국 허가 가능성과 로열티</h1><p>BDD 요건·2026년 사례·로열티와 지분법 손익 · 가능성 %와 로열티율은 내 추정</p></div>
- <div class="kpis">${kpi('BDD 지정 가능성','약 70%','요건 충족 쉬움, 비슷한 사례 다수','reg')}${kpi('FDA 판매 허가 27년 중순','10% 미만','전향 임상 없음 · Freenome은 4.8만 명','reg')}${kpi('2030 로열티(회사 목표·8%)','약 67억','2026E 영업이익 28억의 2.4배','reg')}${kpi('미국 옵션 주당 가치','680~2,500원','성공확률 35% · +9~33%','reg')}</div>
+ <div class="kpis">${kpi('BDD 지정 가능성','약 70%','요건 충족 쉬움, 비슷한 사례 다수','reg')}${kpi('FDA 판매 허가 27년 중순','10% 미만','전향 임상 없음 · Freenome은 4.8만 명','reg')}${kpi('2030 로열티(회사 목표·8%)','약 67억','2026E 영업이익 28억의 2.4배','reg')}${kpi('로열티 구조 시총 애드','+160~600억','성공확률 35% · 연결 편입 없을 때','dream')}</div>
  <div class="two">${card('BDD 요건 (FD&C 515B조)','신청 후 60일 안에 결정 · 지정은 허가가 아님',`<table class="vs"><tbody>
  <tr><td>① 필수</td><td>생명을 위협하는 질환을 더 효과적으로 진단 → 췌장암 조기 발견, 충족 가능성 높음</td></tr>
  <tr><td>② 택1</td><td>(A) 획기적 기술 (B) <b>승인된 대안 없음</b> (C) 상당한 이점 (D) 환자 최선의 이익 → 승인된 췌장암 혈액 선별검사가 없어 (B) 해당</td></tr>
@@ -262,7 +262,7 @@ function build(){
  <label>랩텍 순이익률(%)<input type="number" id="rM" value="20" step="5"></label>
  <label>지분율(%)<input type="number" id="rE" value="31" step="1"></label>
  <label>성공확률(%)<input type="number" id="rP" value="35" step="5"></label></div>
- <div id="rOut"></div><p class="cap" style="margin-top:6px">주당 가치 = (로열티 + 지분법) × PER 20배 ÷ 1.75(연 15%, 4년 할인) × 성공확률 ÷ 주식수. 환율 1,400원.</p>`)}</div>
+ <div id="rOut"></div><p class="cap" style="margin-top:6px">시총 애드 = (로열티 + 지분법) × PER 20배 ÷ 1.75(연 15%, 4년 할인) × 성공확률. 환율 1,400원.</p>`)}</div>
  ${card('시나리오 표 (억원, 연간)','랩텍 몫 60%, 랩텍 순이익률 15~25%',`<div class="tw"><table><thead><tr><th>경로</th><th>연도</th><th class="n">미국 매출</th><th class="n">로열티 5%</th><th class="n">8%</th><th class="n">10%</th><th class="n">지분법 31%</th></tr></thead><tbody>
  <tr><td>회사 목표</td><td>2028</td><td class="n">$30M = 420</td><td class="n">13</td><td class="n">20</td><td class="n">25</td><td class="n">12~20</td></tr>
  <tr><td>회사 목표</td><td>2030</td><td class="n">$100M = 1,400</td><td class="n">42</td><td class="n"><b>67</b></td><td class="n">84</td><td class="n">39~65</td></tr>
@@ -270,19 +270,45 @@ function build(){
  <tr><td>보수</td><td>2030</td><td class="n">$30M = 420</td><td class="n">13</td><td class="n">20</td><td class="n">25</td><td class="n">12~20</td></tr></tbody></table></div>
  <p class="cap" style="margin-top:8px">2026E(키움) 매출 347억·영업이익 28억 대비 회사 목표 2030·8%면 매출 +19%, 영업이익 3.4배. 로열티율 근거: Freenome→Exact 0~10%, 9월 가이드 8% 가정. GC랩텍 재무(부채 > 자산 표기)는 확인 필요.</p>`)}
  </section>`;
+
+ /* 꿈의 지도 */
+ H+=`<section class="page" id="dream"><div class="page-head"><h1>꿈의 지도</h1><p>바이오는 꿈을 파는 곳 · 현실성 있는 꿈과 결말 · 시총 애드 기준(억원)</p></div>
+ <div class="kpis">${kpi('지금 시총',nf(MC)+'억','미국은 거의 0으로 반영','dream')}${kpi('미국 사업가치(100%)','7,000억~1.4조','2030 $1억 × 매출 5~10배','dream')}${kpi('연결 편입 시 귀속 애드','+2,200~4,400억','현재가치, 55% 귀속','dream')}${kpi('다중암까지 가면','+1조원대','2032 $3억 × 8배, 현재가치','dream')}</div>
+ ${card('왜 현실성 있는 꿈인가','10월 노션 리서치 + 컨콜',`<ul class="def">
+ <li><b>모델은 증명됨:</b> 가던트 Shield(대장암 혈액검사) 2026 가이던스 27~28.5만 건, $218~230M → 10~20배면 3.1~6.3조원</li>
+ <li><b>췌장암은 빈 시장:</b> 평균위험 대상 표준 혈액 선별검사 없음. 고위험군은 MRI·EUS 감시라 비싸고 침습적 → <b>혈액으로 먼저 거르는 방식</b>이 유력</li>
+ <li><b>물량이 과하지 않음:</b> $1억 ÷ 건당 $1,500 = 연 6.7만 건 = Shield 올해 물량의 4분의 1. 미국 신규 환자 대장암 15.9만 · 췌장암 6.75만 명</li>
+ <li><b>가던트가 지씨지놈을 볼 이유:</b> 자체 Shield MCD 췌장암 민감도 약 68% vs PancSight 1·2기 87.5~91.7%. 경쟁사 ClearNote는 가던트와 직접 경쟁 → 기술을 넘길 이유 없음. 지씨지놈은 국내에서 Guardant360을 팔아 온 관계</li>
+ <li><b>플랫폼 확장:</b> 췌장암 다음 간암·유방암·폐암을 2년에 하나씩 → 파트너십 장기화</li></ul>`)}
+ ${card('관문을 넘을 때마다 붙는 시총','연결 편입(55%)·매출 5배 기준 현재가치 2,200억 × 단계별 성공확률(내 추정). 막대 = 지금 시총 + 미국 애드',`<div class="ch-box tall"><canvas id="cDream"></canvas></div>
+ <div class="tw"><table><thead><tr><th>단계</th><th class="n">성공확률</th><th class="n">애드(5배)</th><th class="n">애드(10배)</th><th>확인할 숫자</th></tr></thead><tbody>
+ <tr><td>지금(데이터 대기)</td><td class="n">20%</td><td class="n">+440</td><td class="n">+880</td><td class="d">-</td></tr>
+ <tr><td>미국 1,500명 결과 양호</td><td class="n">30%</td><td class="n">+660</td><td class="n">+1,320</td><td class="d">특이도 98% 이상에서 1·2기 민감도 80% 후반~90%, 당뇨·췌장염·낭종에서 위양성 낮음</td></tr>
+ <tr><td>BDD 지정</td><td class="n">40%</td><td class="n">+880</td><td class="n">+1,760</td><td class="d">신청 후 60일</td></tr>
+ <tr><td>가던트 본계약</td><td class="n">55%</td><td class="n">+1,210</td><td class="n">+2,420</td><td class="d">배분 비율, 계약금·마일스톤</td></tr>
+ <tr><td>LDT 출시·급여</td><td class="n">75%</td><td class="n">+1,650</td><td class="n">+3,300</td><td class="d">MolDX 기술평가, 수가</td></tr>
+ <tr><td>미국 매출 $30M</td><td class="n">90%</td><td class="n">+1,980</td><td class="n">+3,960</td><td class="d">분기 검사 건수</td></tr></tbody></table></div>`)}
+ ${card('꿈의 크기별 시총 애드','2030 미국 췌장암 $1억 기준, 할인 연 15%(÷1.75)',`<div class="tw"><table><thead><tr><th>꿈의 크기</th><th class="n">미국 사업가치</th><th class="n">귀속</th><th class="n">2030 애드</th><th class="n">현재가치 애드</th></tr></thead><tbody>
+ <tr><td>로열티 + 지분 · 5배</td><td class="n">7,000억</td><td class="n">약 35%</td><td class="n">+2,450억</td><td class="n">+1,400억</td></tr>
+ <tr><td><b>연결 편입 · 5배</b></td><td class="n">7,000억</td><td class="n">55%</td><td class="n"><b>+3,850억</b></td><td class="n"><b>+2,200억</b></td></tr>
+ <tr><td>연결 편입 · 10배</td><td class="n">1.4조</td><td class="n">55%</td><td class="n">+7,700억</td><td class="n">+4,400억</td></tr>
+ <tr><td>다중암 $300M(2032) · 8배 · 연결</td><td class="n">3.4조</td><td class="n">55%</td><td class="n">+1.85조</td><td class="n">+1.0조</td></tr>
+ <tr><td class="muted">참고: Shield $224M × 10~20배</td><td class="n muted">3.1~6.3조</td><td></td><td></td><td></td></tr></tbody></table></div>
+ <div class="note" style="margin-top:10px"><b>현실 체크:</b> 연결 편입이 안 되면 귀속이 35%로 줄고, 로열티만이면 애드는 +160~600억. 공개된 특이도는 95.4%라 98%까지 올리는 게 첫 관문. 꿈의 전제는 '미국 데이터 → 가던트 본계약 → 연결 편입' 세 가지가 함께 가는 것.</div>`)}
+ </section>`;
  /* 밸류 */
  H+=`<section class="page" id="val"><div class="page-head"><h1>밸류에이션</h1><p>EV/매출 방식. 숫자를 바꾸면 바로 계산됩니다</p></div>
  <div class="kpis">${kpi('지금 EV',nf(ev)+'억','시총 '+nf(MC)+' − 순현금 '+NETCASH,'val')}${kpi('EV/최근 4분기 매출',nf(ev/ttmRev,1)+'배','LTM P/S 7배(삼성, 11/2)','val')}${kpi('PER 2026E',nf(PX/258,1)+'배','키움 EPS 258원','val')}${kpi('PBR',nf(PX/3377,2)+'배','BPS 3,377원','val')}</div>
- ${card('시나리오','2027E 매출 410억(2026E 347억 × 1.18, 회사 "15~20% 성장")',`<div class="ch-box"><canvas id="cV"></canvas></div><div class="tw"><table><thead><tr><th>시나리오</th><th>가정</th><th class="n">주가</th><th class="n">지금 대비</th></tr></thead><tbody>
- <tr><td class="down"><b>Bear</b></td><td>국내 성장 둔화. 2026E 매출 347억 × EV/매출 2.5배 + 순현금 430억 (52주 저점 4,310원 부근)</td><td class="n">5,500</td><td class="n down">-29%</td></tr>
- <tr><td><b>Base</b></td><td>미국 0원. 2027E 410억 × 4.0배(지금 수준) + 430억</td><td class="n">8,800</td><td class="n up">+14%</td></tr>
- <tr><td class="up"><b>Bull</b></td><td>BDD 지정·가던트 계약으로 미국 가시화. 410억 × 6.0배(삼성 LTM 7배 아래) + 430억</td><td class="n">12,200</td><td class="n up">+58%</td></tr></tbody></table></div>`)}
+ ${card('시나리오','2027E 매출 410억(2026E 347억 × 1.18, 회사 "15~20% 성장")',`<div class="ch-box"><canvas id="cV"></canvas></div><div class="tw"><table><thead><tr><th>시나리오</th><th>가정</th><th class="n">시총(주가)</th><th class="n">시총 애드</th></tr></thead><tbody>
+ <tr><td class="down"><b>Bear</b></td><td>국내 성장 둔화. 2026E 매출 347억 × EV/매출 2.5배 + 순현금 430억 (52주 저점 4,310원 부근)</td><td class="n">1,300억(5,500원)</td><td class="n down">-530억</td></tr>
+ <tr><td><b>Base</b></td><td>미국 0원. 2027E 410억 × 4.0배(지금 수준) + 430억</td><td class="n">2,070억(8,800원)</td><td class="n up">+240억</td></tr>
+ <tr><td class="up"><b>Bull</b></td><td>BDD 지정·가던트 계약으로 미국 가시화. 410억 × 6.0배(삼성 LTM 7배 아래) + 430억</td><td class="n">2,890억(12,200원)</td><td class="n up">+1,060억</td></tr></tbody></table></div>`)}
  ${card('직접 계산','',`<div class="fin-in">
  <label>2027E 매출(억)<input type="number" id="vR" value="410"></label>
  <label>EV/매출(배)<input type="number" id="vM" value="4" step="0.5"></label>
  <label>순현금(억)<input type="number" id="vC" value="430"></label>
  <label>미국 옵션 가치(억)<input type="number" id="vU" value="0" step="100"></label></div>
- <div>적정 주가 <span class="big" id="vOut"></span> <span id="vUp"></span></div>
+ <div>적정 시총 <span class="big" id="vOut"></span> <span id="vUp"></span></div>
  <p class="cap" style="margin-top:6px">미국 옵션 예: 2030 GC랩텍 매출 $1억(약 1,400억) × 지분 31% × 순이익률 30% × PER 20배 ÷ 현재가치 할인 → 회사 숫자를 그대로 믿을 때 수백억~1천억대. 가정이 많아 Base에는 넣지 않음.</p>`)}
  ${card('국내 유전체 비교','11/24 Yahoo, 쓰리빌리언은 GVA가 메자닌 약 50억 보유',`<table class="vs"><thead><tr><th></th><th class="n">지씨지놈</th><th class="n">쓰리빌리언</th></tr></thead><tbody>
  <tr><td>시총</td><td class="n">${nf(MC)}억</td><td class="n">약 1,950억</td></tr><tr><td>PBR</td><td class="n">2.3배</td><td class="n">7.7배</td></tr><tr><td>PER</td><td class="n">약 30배(26E)</td><td class="n">131배</td></tr><tr><td>영업이익</td><td class="n">흑자(최근 4분기 ${nf(ttmOp)}억)</td><td class="n">미미</td></tr><tr><td>GVA 보유</td><td class="n">없음</td><td class="n">CB 25억 + 전환우선주 25억(전환가 12,501원)</td></tr></tbody></table>`)}
@@ -330,8 +356,8 @@ function build(){
 
 function rcalc(){const g=k=>+document.getElementById(k).value;const usd=g('rU'),sh=g('rS')/100,r=g('rR')/100,m=g('rM')/100,e=g('rE')/100,p=g('rP')/100;
  const gross=usd*14,lab=gross*sh,roy=lab*r,eq=lab*m*e,val=(roy+eq)*20/1.75*p,ps=val/SH*1e4;
- document.getElementById('rOut').innerHTML=`<table class="vs"><tbody><tr><td>미국 검사 매출</td><td>${nf(gross)}억</td></tr><tr><td>랩텍 매출</td><td>${nf(lab)}억</td></tr><tr><td>지씨지놈 로열티 = 매출·영업이익</td><td><b>${nf(roy)}억</b> (2026E 영업이익 28억의 ${nf(roy/28,1)}배)</td></tr><tr><td>지분법이익(영업외)</td><td>${nf(eq)}억</td></tr><tr><td>미국 옵션 주당 가치</td><td><b>${nf(ps)}원</b> <span class="${cls(ps)}">${pc(ps/PX*100)}</span></td></tr></tbody></table>`}
-function calc(){const r=+$('#vR').value,m=+$('#vM').value,c=+$('#vC').value,u=+$('#vU').value;const p=(r*m+c+u)/SH*1e4;$('#vOut').textContent=nf(p)+'원';const up=(p/PX-1)*100;$('#vUp').innerHTML=`<span class="${cls(up)}">${pc(up)}</span>`}
+ document.getElementById('rOut').innerHTML=`<table class="vs"><tbody><tr><td>미국 검사 매출</td><td>${nf(gross)}억</td></tr><tr><td>랩텍 매출</td><td>${nf(lab)}억</td></tr><tr><td>지씨지놈 로열티 = 매출·영업이익</td><td><b>${nf(roy)}억</b> (2026E 영업이익 28억의 ${nf(roy/28,1)}배)</td></tr><tr><td>지분법이익(영업외)</td><td>${nf(eq)}억</td></tr><tr><td>미국 시총 애드(현재가치)</td><td><b>+${nf(val)}억</b> (지금 시총 ${nf(MC)}억의 ${nf(val/MC*100)}%)</td></tr></tbody></table>`}
+function calc(){const r=+$('#vR').value,m=+$('#vM').value,c=+$('#vC').value,u=+$('#vU').value;const v=r*m+c+u;$('#vOut').textContent=nf(v)+'억';const add=v-MC;$('#vUp').innerHTML=`지금 대비 <span class="${cls(add)}">${add>0?'+':''}${nf(add)}억 (${pc(add/MC*100)})</span>`}
 
 /* ---------- 차트 ---------- */
 function mk(id,cfg){const el=document.getElementById(id);if(!el)return;const old=Chart.getChart(el);if(old)old.destroy();Chart.defaults.color=css('--sub');Chart.defaults.borderColor=css('--grid');Chart.defaults.font.family='Pretendard Variable, Pretendard, sans-serif';new Chart(el,cfg)}
@@ -360,6 +386,11 @@ function draw(h){
   const col=pr.map(p=>p.n==='지씨지놈'?css('--up'):c1);
   mk('cPS',{type:'bar',data:{labels:pr.map(p=>p.n),datasets:[{data:pr.map(p=>p.ps),backgroundColor:col}]},options:{...O,indexAxis:'y',plugins:{legend:{display:false}}}});
   mk('cOPM',{type:'bar',data:{labels:pr.map(p=>p.n),datasets:[{data:pr.map(p=>Math.max(p.opm,-120)),backgroundColor:col}]},options:{...O,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>pr[c.dataIndex].opm+'%'}}},scales:{x:{ticks:{callback:v=>v+'%'}}}}});
+ }
+
+ if(h==='dream'){
+  const st=['지금','미국 데이터','BDD','가던트 계약','LDT·급여','매출 $30M'],a5=[440,660,880,1210,1650,1980],a10=[880,1320,1760,2420,3300,3960];
+  mk('cDream',{type:'bar',data:{labels:st,datasets:[{label:'지금 시총',data:st.map(()=>Math.round(MC)),backgroundColor:css('--c6'),stack:'s'},{label:'미국 애드(5배)',data:a5,backgroundColor:c1,stack:'s'},{label:'추가(10배일 때)',data:a10.map((v,i)=>v-a5[i]),backgroundColor:c2+'99',stack:'s'}]},options:{...O,scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>nf(v)+'억'}}},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.raw)+'억'}}}}});
  }
  if(h==='us') mk('cJ',{type:'bar',data:{labels:JP.q,datasets:[{label:'억원',data:JP.v,backgroundColor:JP.q.map(q=>q.includes('E')?c2+'99':c2)}]},options:{...O,plugins:{legend:{display:false}}}});
  if(h==='val') mk('cV',{type:'bar',data:{labels:['Bear','현재가','Base','Bull'],datasets:[{data:[5500,PX,8800,12200],backgroundColor:[css('--down'),c6(),c1,css('--up')]}]},options:{...O,indexAxis:'y',plugins:{legend:{display:false}}}});
