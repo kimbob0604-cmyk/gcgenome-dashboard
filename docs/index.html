@@ -112,7 +112,7 @@ const JP={q:['1Q26','2Q26','3Q26','4Q26E','2027E(회사)'],v:[0,5,7,10,100]};
 
 const PEERS=[{"t": "GRAL", "n": "Grail", "cur": "USD", "px": 103.55, "mc": 4655833088, "rev": 166604000, "rg": 0.037, "opm": -3.32038, "gm": 0.46679002, "ps": 27.945505, "ni": -406177984, "y52": -0.10906643, "name": "GRAIL, Inc."}, {"t": "GH", "n": "Guardant Health", "cur": "USD", "px": 154.17, "mc": 20857036800, "rev": 1278883968, "rg": 0.361, "opm": -0.39403, "gm": 0.65190005, "ps": 16.308779, "ni": -485072992, "y52": 0.31083143, "name": "Guardant Health, Inc."}, {"t": "NTRA", "n": "Natera", "cur": "USD", "px": 292.39, "mc": 42397876224, "rev": 2908875008, "rg": 0.341, "opm": -0.085360005, "gm": 0.65142995, "ps": 14.575352, "ni": -164714000, "y52": 0.14594686, "name": "Natera, Inc."}, {"t": "394800.KQ", "n": "쓰리빌리언", "cur": "KRW", "px": 6140.0, "mc": 195390472192, "rev": 9783881728, "rg": 1.025, "opm": -0.71685, "gm": 1.0, "ps": 19.97065, "ni": -5966963712, "y52": -0.45327103, "name": "3billion, Inc."}, {"t": "228760.KQ", "n": "지노믹트리", "cur": "KRW", "px": 8070.0, "mc": 198078119936, "rev": 2946381056, "rg": -0.511, "opm": -3.9839802, "gm": -0.0558, "ps": 67.2276, "ni": -9026676736, "y52": -0.6745417, "name": "Genomictree Inc."}, {"t": "461030.KQ", "n": "아이엠비디엑스", "cur": "KRW", "px": 2120.0, "mc": 30389176320, "rev": 5599463424, "rg": -0.0, "opm": -1.5375, "gm": 0.28047, "ps": 5.427159, "ni": -7588599808, "y52": -0.77558637, "name": "IMB Dx, Inc."}, {"t": "340450.KQ", "n": "지씨지놈", "cur": "KRW", "px": 7740.0, "mc": 183057137664, "rev": 32637421568, "rg": 0.062, "opm": 0.04737, "gm": 0.46627998, "ps": 5.6088114, "ni": 5415054848, "y52": 0.1942215, "name": "GC Genome Corporation"}];
 /* ---------- 탭 ---------- */
-const PAGES=[['sum','요약'],['fin','실적'],['kpi','성장 지표'],['tech','기술 이해'],['peer','글로벌 비교'],['us','미국·일본'],['val','밸류'],['px','주가'],['pitch','5분 피칭'],['qa','예상 질의'],['src','출처']];
+const PAGES=[['sum','요약'],['fin','실적'],['kpi','성장 지표'],['tech','기술 이해'],['peer','글로벌 비교'],['us','미국·일본'],['reg','허가·로열티'],['val','밸류'],['px','주가'],['pitch','5분 피칭'],['qa','예상 질의'],['src','출처']];
 let charts=[];
 function nav(){const h=(location.hash||'#sum').slice(1);document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===h));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.p===h));window.scrollTo(0,0);draw(h)}
 function card(h,cap,body){return `<div class="card"><h2>${h}</h2>${cap?`<p class="cap">${cap}</p>`:''}${body}</div>`}
@@ -148,7 +148,7 @@ function build(){
  <div class="st"><div class="w">12월~1Q27</div><div class="e">FDA BDD 신청</div><div class="x">혁신의료기기, 60일 내 결정</div><span class="pill wait">대기</span></div>
  <div class="st"><div class="w">2027.1~3</div><div class="e">G-NIPT 일본 인가</div><div class="x">2Q27부터 매출</div><span class="pill wait">대기</span></div>
  <div class="st"><div class="w">연말</div><div class="e">GC랩텍 연결 편입 결정</div><div class="x">녹십자홀딩스 지분 일부 인수 논의</div></div>
- <div class="st"><div class="w">27년 중순</div><div class="e">FDA 허가·가던트 계약</div><div class="x">7~8월 본계약 예상(회사)</div></div>
+ <div class="st"><div class="w">27년 중순</div><div class="e">FDA 허가·가던트 계약</div><div class="x">7~8월 본계약 예상(회사). "허가"는 BDD 지정일 가능성, 판매 허가는 전향 임상 필요</div><span class="pill risk">확인 필요</span></div>
  <div class="st"><div class="w">1H28</div><div class="e">미국 매출 개시</div><div class="x">2028 $30M → 2030 $100M(회사 목표)</div></div>
  </div>`)}
  </div></section>`;
@@ -227,6 +227,49 @@ function build(){
  <li>벤치마크: 가던트 쉴드 2024.9 출시 후 매출 급증, 가던트 시총 2년 만에 약 5조 → 30조원(컨콜 설명) / 그레일 Galleri 2Q26 6.1만 건(+35%), FDA 자문위 찬성 7·반대 2</li>
  <li class="up">리스크: 후향적 데이터 기준. 그레일은 전향적 연구에서 민감도가 최대 40% 떨어졌음(삼성)</li></ul>`)}
  </section>`;
+
+ /* 허가·로열티 */
+ H+=`<section class="page" id="reg"><div class="page-head"><h1>미국 허가 가능성과 로열티</h1><p>BDD 요건·2026년 사례·로열티와 지분법 손익 · 가능성 %와 로열티율은 내 추정</p></div>
+ <div class="kpis">${kpi('BDD 지정 가능성','약 70%','요건 충족 쉬움, 비슷한 사례 다수','reg')}${kpi('FDA 판매 허가 27년 중순','10% 미만','전향 임상 없음 · Freenome은 4.8만 명','reg')}${kpi('2030 로열티(회사 목표·8%)','약 67억','2026E 영업이익 28억의 2.4배','reg')}${kpi('미국 옵션 주당 가치','680~2,500원','성공확률 35% · +9~33%','reg')}</div>
+ <div class="two">${card('BDD 요건 (FD&C 515B조)','신청 후 60일 안에 결정 · 지정은 허가가 아님',`<table class="vs"><tbody>
+ <tr><td>① 필수</td><td>생명을 위협하는 질환을 더 효과적으로 진단 → 췌장암 조기 발견, 충족 가능성 높음</td></tr>
+ <tr><td>② 택1</td><td>(A) 획기적 기술 (B) <b>승인된 대안 없음</b> (C) 상당한 이점 (D) 환자 최선의 이익 → 승인된 췌장암 혈액 선별검사가 없어 (B) 해당</td></tr>
+ <tr><td>제도 규모</td><td>누적 지정 1,320건 중 판매 허가 210건(16%, 2026.6.30 FDA)</td></tr>
+ <tr><td>감점 요인</td><td>후향적 사례-대조 데이터뿐, 미국 사용 대상 집단·검증 계획 요구 가능</td></tr></tbody></table>`)}
+ ${card('2025~26 사례','',`<div class="tw"><table><thead><tr><th>제품</th><th>날짜</th><th>결과</th><th>시사점</th></tr></thead><tbody>
+ <tr><td>Shield MCD(가던트)</td><td>2025.6</td><td>BDD</td><td class="d">유통 파트너가 자체 다중암 검사 보유</td></tr>
+ <tr><td>SPOT-MAS 10(Gene Solutions)</td><td>2026.5</td><td>BDD</td><td class="d">조각 패턴 방식 아시아 회사도 지정</td></tr>
+ <tr><td><b>SimpleScreen CRC(Freenome)</b></td><td>2026.7</td><td><b>FDA 허가</b></td><td class="d">4.8만 명 전향 임상, 민감도 81%·특이도 90%</td></tr>
+ <tr><td>Galleri(Grail)</td><td>2026.9</td><td>자문위 7:2</td><td class="d">2019 BDD 후 7년째 최종 승인 대기</td></tr>
+ <tr><td>MCED(Natera)</td><td>2026.10</td><td>BDD</td><td class="d">성능 미공개</td></tr>
+ <tr><td>PancreaSure(Immunovia)</td><td>2025.9</td><td>LDT 출시</td><td class="d">CMS $897에도 1H26 매출 SEK 0.76M</td></tr></tbody></table></div>`)}</div>
+ ${card('일정별 가능성 (내 추정)','회사가 말한 "27년 FDA 허가"는 BDD 지정일 가능성이 큼 · 삼성은 "28년 보험코드, LDT 상업화"로 적음',`<div class="tw"><table><thead><tr><th>단계</th><th>회사 일정</th><th class="n">가능성</th><th>근거</th></tr></thead><tbody>
+ <tr><td>BDD 지정</td><td>2Q27 초</td><td class="n up">약 70%</td><td class="d">요건 ①·②(B) 충족, 사례 다수</td></tr>
+ <tr><td>가던트 본계약</td><td>27년 7~8월</td><td class="n">약 50%</td><td class="d">자체 Shield MCD 보유, 4:6 협의 중</td></tr>
+ <tr><td>LDT 출시</td><td>1H28</td><td class="n">50~60%</td><td class="d">GC랩텍 CLIA 실험실, FDA 허가 불필요</td></tr>
+ <tr><td>메디케어 급여</td><td>28년</td><td class="n">30~40%</td><td class="d">진단검사는 RAPID 제외 → MolDX 지역 심사</td></tr>
+ <tr><td>FDA 판매 허가</td><td>27년 중순(키움)</td><td class="n down">10% 미만</td><td class="d">전향 임상 필요, Freenome은 임상부터 약 5년</td></tr></tbody></table></div>`)}
+ <div class="two">${card('손익에 들어오는 길','',`<table class="vs"><thead><tr><th>경로</th><th>매출</th><th>영업이익</th><th>순이익</th></tr></thead><tbody>
+ <tr><td>로열티(율 비공개)</td><td>○</td><td>○ 거의 그대로</td><td>○</td></tr>
+ <tr><td>마일스톤 잔여 약 137억</td><td>○ 일회성</td><td>○</td><td>○</td></tr>
+ <tr><td>지분법 24.1%→31%</td><td>×</td><td>×</td><td>○ 영업외</td></tr>
+ <tr><td>연결 편입 시</td><td>○ 랩텍 전부</td><td>○</td><td>비지배 차감</td></tr></tbody></table>
+ <p class="cap" style="margin-top:8px">북미 권리는 2023.4 GC랩텍에 독점 라이선스($10.3M, 누적 수취 6.7억). 랩텍 1H26 매출 158억·순이익 15억.</p>`)}
+ ${card('로열티 계산기','미국 검사 매출 → 랩텍 몫 → 지씨지놈 손익',`<div class="fin-in">
+ <label>미국 검사 매출($M)<input type="number" id="rU" value="100" step="10"></label>
+ <label>랩텍 몫(%)<input type="number" id="rS" value="60" step="5"></label>
+ <label>로열티율(%)<input type="number" id="rR" value="8" step="1"></label>
+ <label>랩텍 순이익률(%)<input type="number" id="rM" value="20" step="5"></label>
+ <label>지분율(%)<input type="number" id="rE" value="31" step="1"></label>
+ <label>성공확률(%)<input type="number" id="rP" value="35" step="5"></label></div>
+ <div id="rOut"></div><p class="cap" style="margin-top:6px">주당 가치 = (로열티 + 지분법) × PER 20배 ÷ 1.75(연 15%, 4년 할인) × 성공확률 ÷ 주식수. 환율 1,400원.</p>`)}</div>
+ ${card('시나리오 표 (억원, 연간)','랩텍 몫 60%, 랩텍 순이익률 15~25%',`<div class="tw"><table><thead><tr><th>경로</th><th>연도</th><th class="n">미국 매출</th><th class="n">로열티 5%</th><th class="n">8%</th><th class="n">10%</th><th class="n">지분법 31%</th></tr></thead><tbody>
+ <tr><td>회사 목표</td><td>2028</td><td class="n">$30M = 420</td><td class="n">13</td><td class="n">20</td><td class="n">25</td><td class="n">12~20</td></tr>
+ <tr><td>회사 목표</td><td>2030</td><td class="n">$100M = 1,400</td><td class="n">42</td><td class="n"><b>67</b></td><td class="n">84</td><td class="n">39~65</td></tr>
+ <tr><td>보수</td><td>2028</td><td class="n">$5M = 70</td><td class="n">2</td><td class="n">3</td><td class="n">4</td><td class="n">2~3</td></tr>
+ <tr><td>보수</td><td>2030</td><td class="n">$30M = 420</td><td class="n">13</td><td class="n">20</td><td class="n">25</td><td class="n">12~20</td></tr></tbody></table></div>
+ <p class="cap" style="margin-top:8px">2026E(키움) 매출 347억·영업이익 28억 대비 회사 목표 2030·8%면 매출 +19%, 영업이익 3.4배. 로열티율 근거: Freenome→Exact 0~10%, 9월 가이드 8% 가정. GC랩텍 재무(부채 > 자산 표기)는 확인 필요.</p>`)}
+ </section>`;
  /* 밸류 */
  H+=`<section class="page" id="val"><div class="page-head"><h1>밸류에이션</h1><p>EV/매출 방식. 숫자를 바꾸면 바로 계산됩니다</p></div>
  <div class="kpis">${kpi('지금 EV',nf(ev)+'억','시총 '+nf(MC)+' − 순현금 '+NETCASH,'val')}${kpi('EV/최근 4분기 매출',nf(ev/ttmRev,1)+'배','LTM P/S 7배(삼성, 11/2)','val')}${kpi('PER 2026E',nf(PX/258,1)+'배','키움 EPS 258원','val')}${kpi('PBR',nf(PX/3377,2)+'배','BPS 3,377원','val')}</div>
@@ -264,7 +307,7 @@ function build(){
  /* 질의 */
  const QA=[
  ['미국 매출이 지씨지놈에 얼마나 들어오나?','미국 사업 주체는 관계사 GC랩텍입니다. 지분이 24.1%이고 내년 상반기 컨버터블 노트 전환으로 31%가 되며, 별도로 로열티를 받습니다. 녹십자홀딩스(51%) 지분 일부를 가져와 연결 편입하는 방안을 연말에 결정합니다. 몫이 불확실하기 때문에 Base에는 미국을 0으로 넣었습니다.'],
- ['FDA를 통과할 근거는?','후향적 기준 1·2기 민감도 87.5%, 특이도 95.4%입니다. 7월 FDA 승인을 받은 프리놈(대장암)이 81%/90.4%이고, 회사가 들은 메디케어 등재 기준은 74%/90%입니다. 다만 아직 BDD 신청 전이라 일정은 회사 계획입니다.'],
+ ['FDA를 통과할 근거는?','먼저 구분이 필요합니다. BDD 지정은 요건(생명 위협 질환, 승인된 대안 없음)이 맞아 가능성이 높다고 보지만, 실제 판매 허가는 Freenome처럼 수만 명 전향 임상이 필요해 27년은 어렵다고 봅니다. 성능 자체는 후향적 기준 1·2기 민감도 87.5%, 특이도 95.4%입니다. 7월 FDA 승인을 받은 프리놈(대장암)이 81%/90.4%이고, 회사가 들은 메디케어 등재 기준은 74%/90%입니다. 다만 아직 BDD 신청 전이라 일정은 회사 계획입니다.'],
  ['전향적 연구에서 성능이 떨어지면?','실제로 그레일 갈레리는 전향적 연구에서 민감도가 최대 40% 떨어졌습니다(삼성). 그래서 미국은 옵션으로만 두고, 매수 근거는 국내 흑자와 순현금입니다. 특이도를 유지하는지가 관건입니다.'],
  ['3분기 매출이 1%밖에 안 늘었는데?','리스크스크린·지놈헬스 재출시가 7월에서 9월로 밀려 약 10억이 4분기로 넘어갔습니다. 대신 G-NIPT +47%, 아이캔서치 +147%로 핵심 검사는 늘었고 영업이익률은 9.5%로 올랐습니다.'],
  ['아이캔서치 건수가 2배인데 매출은 왜 덜 늘었나?','검진 매출에는 다른 검사도 있고, 5년 전 출시한 검사 업그레이드로 일부를 중단했습니다. 아이캔서치 상반기 매출은 약 13억이고, 없었다면 검진 매출이 20~30% 줄었을 거라고 회사가 설명했습니다.'],
@@ -281,9 +324,13 @@ function build(){
  $('#main').innerHTML=H;
  $('#foot').textContent='리서치 정리 · 투자 권유 아님 · 이미지 출처: 지씨지놈 IR';
  $('#stamp').textContent='기준 2026-11-24';
- ['vR','vM','vC','vU'].forEach(id=>document.getElementById(id).addEventListener('input',calc));calc();
+ ['vR','vM','vC','vU'].forEach(id=>document.getElementById(id).addEventListener('input',calc));calc();['rU','rS','rR','rM','rE','rP'].forEach(id=>document.getElementById(id).addEventListener('input',rcalc));rcalc();
  document.querySelectorAll('#rng button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#rng button').forEach(x=>x.classList.toggle('on',x===b));drawPx(+b.dataset.r)});
 }
+
+function rcalc(){const g=k=>+document.getElementById(k).value;const usd=g('rU'),sh=g('rS')/100,r=g('rR')/100,m=g('rM')/100,e=g('rE')/100,p=g('rP')/100;
+ const gross=usd*14,lab=gross*sh,roy=lab*r,eq=lab*m*e,val=(roy+eq)*20/1.75*p,ps=val/SH*1e4;
+ document.getElementById('rOut').innerHTML=`<table class="vs"><tbody><tr><td>미국 검사 매출</td><td>${nf(gross)}억</td></tr><tr><td>랩텍 매출</td><td>${nf(lab)}억</td></tr><tr><td>지씨지놈 로열티 = 매출·영업이익</td><td><b>${nf(roy)}억</b> (2026E 영업이익 28억의 ${nf(roy/28,1)}배)</td></tr><tr><td>지분법이익(영업외)</td><td>${nf(eq)}억</td></tr><tr><td>미국 옵션 주당 가치</td><td><b>${nf(ps)}원</b> <span class="${cls(ps)}">${pc(ps/PX*100)}</span></td></tr></tbody></table>`}
 function calc(){const r=+$('#vR').value,m=+$('#vM').value,c=+$('#vC').value,u=+$('#vU').value;const p=(r*m+c+u)/SH*1e4;$('#vOut').textContent=nf(p)+'원';const up=(p/PX-1)*100;$('#vUp').innerHTML=`<span class="${cls(up)}">${pc(up)}</span>`}
 
 /* ---------- 차트 ---------- */
