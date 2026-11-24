@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>지씨지놈 대시보드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--text:#191f28;--sub:#4e5968;--muted:#8b95a1;--line:#e9ebee;--chip:#f2f4f6;--chip-on:#fff;--up:#d6453d;--down:#3a6fd8;--accent:#3182f6;--hover:#f7f8fa;--head-bg:rgba(255,255,255,.86);--shadow:0 1px 2px rgba(16,24,40,.04),0 4px 16px rgba(16,24,40,.05);--grid:#eef0f3;
+--c1:#3182f6;--c2:#f59e0b;--c3:#14a39a;--c4:#9b6bd3;--c5:#d6453d;--c6:#8b95a1;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101216;--card:#191c22;--text:#e8eaed;--sub:#b0b8c1;--muted:#7d8590;--line:#2a2e36;--chip:#242832;--chip-on:#343a46;--up:#ff7a72;--down:#6f9bff;--accent:#4b93ff;--hover:#20242c;--head-bg:rgba(25,28,34,.86);--shadow:none;--grid:#242832;--c1:#4b93ff;--c2:#f5b342;--c3:#2fc4b8;--c4:#b48ae8;--c5:#ff7a72;--c6:#7d8590;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101216;--card:#191c22;--text:#e8eaed;--sub:#b0b8c1;--muted:#7d8590;--line:#2a2e36;--chip:#242832;--chip-on:#343a46;--up:#ff7a72;--down:#6f9bff;--accent:#4b93ff;--hover:#20242c;--head-bg:rgba(25,28,34,.86);--shadow:none;--grid:#242832;--c1:#4b93ff;--c2:#f5b342;--c3:#2fc4b8;--c4:#b48ae8;--c5:#ff7a72;--c6:#7d8590;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 "Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+a{color:inherit}button,select,input{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:20px;padding:10px 32px;background:var(--head-bg);border-bottom:1px solid var(--line);-webkit-backdrop-filter:saturate(1.6) blur(12px);backdrop-filter:saturate(1.6) blur(12px)}
+.brand{font-weight:800;font-size:16px;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.brand::before{content:"";width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,var(--up),#f59e0b 55%,var(--accent))}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tab{padding:6px 12px;border-radius:999px;white-space:nowrap;color:var(--sub);text-decoration:none;cursor:pointer;border:0;background:none;min-height:34px}
+.tab:hover{background:var(--chip);color:var(--text)}.tab.on{background:var(--text);color:var(--card);font-weight:600}
+.top-right{margin-left:auto;display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px;white-space:nowrap}
+.icon-btn{background:var(--card);border:1px solid var(--line);border-radius:8px;width:34px;height:34px;cursor:pointer}
+main{max-width:1240px;margin:0 auto;padding:18px 32px 40px}
+.page{display:none}.page.on{display:block}
+.page-head{margin:6px 2px 14px}.page-head h1{margin:0 0 2px;font-size:22px;font-weight:800;letter-spacing:-.03em}.page-head p{margin:0;color:var(--muted);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px 20px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:16px;font-weight:700}.cap{color:var(--muted);font-size:12.5px;margin:0 0 10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);cursor:pointer;text-align:left}
+.kpi:hover{background:var(--hover)}.kpi .l{font-size:12px;color:var(--muted)}.kpi .v{font-size:22px;font-weight:800;letter-spacing:-.02em}.kpi .s{font-size:12px;color:var(--sub)}
+.up{color:var(--up)}.down{color:var(--down)}.muted{color:var(--muted)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:12px;box-shadow:var(--shadow)}
+.seg{display:inline-flex;background:var(--chip);border-radius:10px;padding:3px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:5px 11px;border-radius:8px;cursor:pointer;color:var(--sub);white-space:nowrap;min-height:32px}
+.seg button.on{background:var(--chip-on);color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.dir{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 12px;cursor:pointer;min-height:34px;font-weight:600}
+.lbl{font-size:12px;color:var(--muted);margin-right:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:12px}
+.wc{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.wc:hover{border-color:var(--sub)}
+.wc .im{position:relative;aspect-ratio:3/4;background:var(--chip);overflow:hidden}
+.wc .im img{width:100%;height:100%;object-fit:cover;display:block}
+.wc .rk{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.72);color:#fff;font-weight:800;font-size:13px;border-radius:8px;padding:2px 8px}
+.wc .ch{position:absolute;right:8px;top:8px;font-size:11px;font-weight:700;border-radius:8px;padding:2px 6px;background:rgba(255,255,255,.92);color:#191f28}
+.wc .bd{padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.wc .t{font-weight:700;font-size:13.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px}
+.wc .g{font-size:11px;color:var(--muted)}
+.wc .m{display:grid;grid-template-columns:1fr auto;gap:1px 8px;font-size:12px}.wc .m span:nth-child(odd){color:var(--muted)}.wc .m b{text-align:right}
+.chip{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:8px;background:var(--chip);margin-right:4px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 8px;border-top:1px solid var(--line);text-align:left;white-space:nowrap}
+th{font-size:12px;font-weight:600;color:var(--muted);background:var(--hover);border-top:0;cursor:pointer;user-select:none}
+th.on{color:var(--accent)}th.on[data-dir=desc]::after{content:" ▼";font-size:10px}th.on[data-dir=asc]::after{content:" ▲";font-size:10px}
+td.n,th.n{text-align:right}tbody tr:hover{background:var(--hover)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:14px}
+.ch-box{position:relative;height:280px}.ch-box.tall{height:340px}
+.fin-in{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 14px;margin-bottom:12px}
+.fin-in label{font-size:12px;color:var(--sub);display:flex;flex-direction:column;gap:3px}
+input[type=number]{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);min-height:36px;width:100%}
+.ct input{max-width:110px;text-align:right}td.d{color:var(--muted);font-size:12px;white-space:normal;min-width:180px}
+.note{background:var(--chip);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+.bad{background:rgba(214,69,61,.08);border:1px solid rgba(214,69,61,.25)}
+ul.def{margin:0;padding-left:18px}ul.def li{margin:4px 0}
+footer{max-width:1240px;margin:0 auto;padding:0 32px 40px;color:var(--muted);font-size:12px}
+@media (max-width:720px){.top{padding:8px 12px;gap:10px;flex-wrap:wrap}.top-right{display:none}main{padding:12px 12px 32px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}footer{padding:0 12px 32px}}
+</style>
+<style>
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--chip);margin:0 4px 4px 0}
+.pill.ok{background:rgba(20,163,154,.14);color:var(--c3)}.pill.wait{background:rgba(245,158,11,.16);color:#b7791f}.pill.risk{background:rgba(214,69,61,.12);color:var(--up)}
+.tl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tl .st{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card)}
+.tl .st .w{font-size:12px;color:var(--muted)}.tl .st .e{font-weight:700;margin:2px 0}.tl .st .x{font-size:12px;color:var(--sub)}
+.script p{margin:0 0 10px;line-height:1.7}.script .tg{font-weight:800;color:var(--accent);margin-right:6px}
+.qa details{border-top:1px solid var(--line);padding:10px 2px}.qa details:first-child{border-top:0}
+.qa summary{cursor:pointer;font-weight:700}.qa details p{margin:8px 0 0;color:var(--sub);line-height:1.65}
+.fig{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}.figcap{font-size:12px;color:var(--muted);margin:6px 0 0}.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}.flow .b{flex:1 1 140px;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--hover)}.flow .b b{display:block;margin-bottom:2px}.flow .b span{font-size:12px;color:var(--sub)}.flow .ar{align-self:center;color:var(--muted)}
+.big{font-size:30px;font-weight:800;letter-spacing:-.03em}
+.vs td{white-space:normal;vertical-align:top}.vs td:first-child{font-weight:600;white-space:nowrap}
+td{white-space:normal}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">지씨지놈 대시보드</div>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="top-right"><span id="stamp"></span><button id="theme" class="icon-btn" aria-label="다크 모드 전환" title="다크 모드 전환">◐</button></div>
+</header>
+<main id="main"></main>
+<footer id="foot"></footer>
+<script>
+const P={"d": ["2025-06-11", "2025-06-12", "2025-06-13", "2025-06-16", "2025-06-17", "2025-06-18", "2025-06-19", "2025-06-20", "2025-06-23", "2025-06-24", "2025-06-25", "2025-06-26", "2025-06-27", "2025-06-30", "2025-07-01", "2025-07-02", "2025-07-03", "2025-07-04", "2025-07-07", "2025-07-08", "2025-07-09", "2025-07-10", "2025-07-11", "2025-07-14", "2025-07-15", "2025-07-16", "2025-07-17", "2025-07-18", "2025-07-21", "2025-07-22", "2025-07-23", "2025-07-24", "2025-07-25", "2025-07-28", "2025-07-29", "2025-07-30", "2025-07-31", "2025-08-01", "2025-08-04", "2025-08-05", "2025-08-06", "2025-08-07", "2025-08-08", "2025-08-11", "2025-08-12", "2025-08-13", "2025-08-14", "2025-08-18", "2025-08-19", "2025-08-20", "2025-08-21", "2025-08-22", "2025-08-25", "2025-08-26", "2025-08-27", "2025-08-28", "2025-08-29", "2025-09-01", "2025-09-02", "2025-09-03", "2025-09-04", "2025-09-05", "2025-09-08", "2025-09-09", "2025-09-10", "2025-09-11", "2025-09-12", "2025-09-15", "2025-09-16", "2025-09-17", "2025-09-18", "2025-09-22", "2025-09-23", "2025-09-24", "2025-09-25", "2025-09-26", "2025-09-29", "2025-09-30", "2025-10-01", "2025-10-02", "2025-10-10", "2025-10-13", "2025-10-14", "2025-10-15", "2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-27", "2025-11-28", "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-08", "2025-12-09", "2025-12-10", "2025-12-11", "2025-12-12", "2025-12-15", "2025-12-16", "2025-12-17", "2025-12-18", "2025-12-19", "2025-12-22", "2025-12-23", "2025-12-24", "2025-12-26", "2025-12-29", "2025-12-30", "2026-01-02", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-03", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-20", "2026-07-21", "2026-07-22", "2026-07-23", "2026-07-24", "2026-07-27", "2026-07-28", "2026-07-29", "2026-07-30", "2026-07-31", "2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-18", "2026-08-19", "2026-08-20", "2026-08-21", "2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28", "2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03", "2026-09-04", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18", "2026-09-21", "2026-09-22", "2026-09-23", "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-23", "2026-11-24"], "gc": [null, 10810, 9820, 9280, 9300, 9500, 9360, 10130, 9800, 9620, 9320, 9680, 9300, 9050, 9030, 8720, 8770, 9000, 8860, 8740, 8730, 8800, 9220, 8920, 9220, 9140, 9120, 9000, 8910, 8990, 8840, 8770, 8610, 8590, 8550, 8500, 8300, 7840, 7840, 8350, 8180, 8070, 8070, 7870, 7850, 7910, 7880, 7730, 7610, 7310, 7320, 7700, 7810, 7710, 7720, 7700, 7600, 7360, 7400, 7750, 7960, 8140, 7990, 8060, 8020, 8000, 8070, 8580, 8330, 8110, 8090, 8000, 8100, 7980, 7860, 7510, 7630, 7560, 7320, 7330, 7200, 7060, 6930, 7020, 7020, 7190, 7150, 7190, 7200, 7320, 7280, 7740, 7500, 7400, 7110, 7120, 7020, 7180, 7030, 6970, 6710, 6750, 6750, 7050, 7150, 6970, 6840, 6470, 6360, 6480, 6220, 6230, 6270, 6540, 6730, 7020, 7200, 7330, 7790, 7630, 7700, 7350, 7340, 7330, 7890, 7980, 7850, 7200, 6770, 6490, 7020, 6900, 6620, 6630, 6550, 6760, 6820, 6680, 6700, 6590, 6600, 6490, 6660, 6620, 6640, 6490, 6500, 6390, 6490, 7200, 6720, 7090, 7330, 7420, 7800, 7860, 8100, 8230, 8470, 8780, 9230, 9100, 8860, 8890, 9230, 9040, 9310, 9240, 9240, 9170, 8610, 8880, 8800, 8250, 8230, 7770, 6510, 7230, 7410, 6950, 7250, 7280, 7350, 7900, 7520, 7790, 7910, 7900, 7900, 7400, 7450, 8280, 7860, 8160, 7970, 7650, 8030, 7450, 7410, 7160, 7050, 7360, 7260, 7410, 7480, 7510, 7670, 8010, 8230, 8000, 7800, 7780, 7840, 8170, 8420, 8520, 8680, 8470, 8270, 7760, 7660, 7430, 7090, 6890, 7060, 7170, 6980, 7020, 6940, 6620, 6770, 7100, 6840, 6740, 6590, 6020, 5710, 5580, 5560, 5400, 5000, 5260, 5080, 5200, 5330, 5320, 5210, 5430, 5210, 4850, 4860, 4490, 4465, 4465, 4415, 4950, 4915, 4860, 4700, 4800, 4860, 4775, 4615, 4525, 4770, 4450, 4465, 4620, 4730, 4740, 5130, 4890, 5220, 5080, 4985, 4745, 4360, 4310, 4600, 4865, 5100, 5230, 5240, 5230, 5470, 5610, 5640, 5690, 5620, 5560, 5690, 5820, 5390, 5390, 5310, 5550, 5600, 5970, 5920, 5890, 5630, 5420, 5510, 5500, 5500, 6020, 5940, 5820, 6010, 6060, 6730, 7000, 6900, 6770, 7290, 8180, 8670, 8760, 8660, 9270, 8880, 10200, 10140, 9870, 9970, 9580, 8850, 8460, 9230, 9350, 10250, 9930, 10040, 9700, 9050, 8340, 8440, 8580, 9100, 9130, 8150, 7970, 7710, 6910, 6770, 7120, 7420, 8400, 8550, 7910, 7620, 8000, 8210, 7720, 7440, 7740], "tb": [7000, 7110, 7520, 7980, 8140, 7880, 7870, 7850, 7750, 7690, 7590, 7400, 7170, 7450, 7310, 7450, 7690, 7300, 7070, 6950, 6790, 6890, 6730, 6660, 6890, 6790, 7120, 7230, 7120, 6950, 7120, 7070, 6820, 6900, 6910, 6700, 6770, 6570, 6660, 6640, 6400, 6350, 6320, 6220, 6170, 6160, 6160, 6300, 6440, 6220, 6000, 5970, 6120, 6080, 5880, 5900, 5900, 5600, 5910, 6240, 6230, 6430, 6170, 6180, 6200, 6220, 6730, 6820, 6840, 7100, 7340, 7500, 7490, 8250, 7980, 7740, 7620, 7490, 7550, 7520, 7770, 7590, 7690, 7740, 8680, 8790, 9030, 8710, 8500, 8260, 8170, 8820, 8970, 8830, 8800, 9210, 10080, 9490, 9830, 9710, 9530, 9770, 9970, 10140, 10820, 10780, 11880, 11340, 11300, 12000, 11000, 10700, 10520, 11400, 11430, 12300, 12470, 13530, 14240, 15240, 15220, 15350, 17830, 18730, 17850, 17890, 18460, 18600, 17320, 17800, 18280, 17530, 17210, 17110, 17890, 18800, 18230, 16400, 16150, 15650, 15960, 16720, 15930, 16150, 16160, 15680, 15700, 15660, 15030, 14830, 14260, 14240, 14880, 15120, 14950, 14770, 15600, 15330, 15480, 15600, 15060, 13910, 13190, 13510, 13660, 14130, 14500, 13840, 14640, 13680, 14710, 14700, 15120, 14170, 14450, 14600, 12120, 13770, 14210, 13070, 13300, 14140, 14400, 14290, 14850, 14960, 15170, 14680, 14830, 12870, 13180, 13030, 13750, 13470, 13200, 12450, 13120, 11940, 12140, 11980, 11400, 11990, 11200, 11370, 10750, 11710, 12220, 12200, 12740, 12310, 11950, 12300, 12510, 13930, 13090, 12810, 13770, 13510, 13130, 12280, 11770, 11620, 11240, 11340, 10890, 10660, 10270, 10150, 9650, 9230, 9320, 10190, 10030, 9780, 9290, 8830, 8400, 8400, 8420, 8100, 6950, 7300, 7190, 7440, 6980, 7040, 7270, 7410, 7020, 6720, 6480, 6010, 6390, 5950, 5640, 6400, 6050, 6320, 6110, 6360, 6010, 5820, 5560, 5440, 5900, 5640, 5430, 5660, 5900, 5420, 5390, 5350, 5840, 5580, 5730, 5170, 4805, 4590, 5140, 5220, 5970, 6180, 6280, 6080, 6350, 6310, 6470, 6330, 6230, 5880, 5790, 5780, 5420, 5440, 5410, 5410, 5190, 5350, 5180, 5060, 4805, 4695, 4835, 4890, 4800, 4600, 4400, 4300, 4105, 4220, 4060, 4310, 4770, 4705, 4705, 5800, 7280, 6630, 6440, 6490, 6040, 6340, 5860, 5900, 5580, 5580, 5670, 5010, 5270, 5380, 5280, 5280, 5270, 5000, 5650, 5580, 6200, 6150, 5350, 5550, 5270, 5240, 5220, 5030, 5820, 6440, 6520, 6640, 6360, 6030, 5810, 6230, 6070, 5970, 5850, 6140], "pt": [58200, 57500, 56800, 57600, 56800, 57700, 56600, 58100, 58400, 58800, 58900, 57900, 57500, 61500, 60400, 60100, 58700, 56600, 57400, 60700, 63600, 62000, 60400, 63500, 64300, 61900, 62000, 60700, 61000, 62400, 62800, 62800, 63200, 60500, 63900, 63000, 66700, 64000, 63800, 67500, 71200, 73100, 73300, 68200, 66700, 66000, 67300, 66100, 65500, 65500, 67400, 68000, 66500, 67000, 65700, 65800, 65900, 63900, 63400, 61200, 61500, 61900, 62700, 65000, 62500, 62500, 61900, 60800, 61700, 60500, 62500, 63200, 62400, 62800, 60500, 59200, 61000, 59600, 59300, 58050, 57000, 56900, 55000, 55400, 55200, 53500, 54000, 53100, 53600, 53300, 55300, 53900, 54200, 53400, 53600, 53100, 53000, 53300, 53200, 51600, 53500, 52000, 50100, 52000, 52200, 52000, 52200, 50800, 52700, 55900, 54300, 54300, 53600, 53300, 54100, 55500, 56100, 56500, 56300, 56100, 54500, 54400, 55600, 54400, 53300, 54600, 51200, 52700, 53500, 53100, 53800, 54200, 53800, 53300, 53400, 52000, 52100, 54900, 53100, 51900, 50600, 51000, 55100, 55100, 56100, 56200, 55600, 54600, 53500, 54200, 53900, 59500, 59700, 61600, 61100, 64200, 66000, 65600, 63000, 61900, 59700, 59100, 58500, 61100, 60900, 60200, 59100, 57600, 57300, 57000, 56800, 56400, 55900, 54000, 52100, 49300, 44850, 46900, 48800, 47200, 46150, 46000, 46200, 46350, 45100, 46000, 46850, 45600, 47150, 46200, 46800, 46800, 45650, 47600, 46000, 46550, 48000, 46500, 45550, 43750, 42750, 44150, 44400, 44100, 44550, 44100, 44400, 44650, 44550, 43800, 43350, 43150, 43350, 43950, 44250, 43250, 42650, 41400, 42600, 41250, 40400, 41800, 41750, 40000, 38550, 39950, 38850, 38800, 38350, 36400, 37350, 39250, 38400, 37300, 37550, 36250, 35600, 34300, 35450, 34400, 33300, 33950, 33500, 35050, 36850, 37400, 36000, 37350, 36200, 35500, 34400, 33300, 34050, 33200, 32550, 38000, 35800, 38400, 38650, 43000, 43200, 46500, 44700, 46700, 43700, 42850, 41950, 42000, 41950, 39150, 39500, 38350, 40500, 44000, 48600, 47550, 49950, 46400, 46100, 45400, 48400, 46750, 49850, 49500, 49650, 51200, 58900, 54800, 53000, 55000, 55400, 57100, 59800, 63400, 63000, 59100, 56600, 61700, 59000, 58200, 56900, 57500, 55300, 53700, 51900, 51300, 52400, 52800, 59100, 57700, 61300, 61900, 61700, 59700, 57400, 57500, 61500, 63000, 61300, 63000, 60500, 63000, 67200, 65500, 67900, 68800, 69200, 66900, 71300, 71800, 70700, 69000, 69800, 69700, 68600, 67500, 66000, 65100, 64200, 64400, 64000, 64100, 68900, 70300, 69000, 67400, 74500, 77400, 73900, 77000, 76300, 77100, 79900, 77200, 76400, 76600], "vol": [null, 6956881, 3162294, 2013128, 3493910, 1369596, 4544627, 15044589, 1949815, 1595656, 921901, 2749967, 740732, 625971, 162705, 257764, 151650, 1393428, 215561, 178605, 123582, 276031, 1086526, 232759, 439570, 173134, 172691, 143436, 97250, 178952, 123205, 94721, 88177, 60547, 53809, 58338, 132492, 157484, 44235, 189502, 74573, 66627, 34787, 63707, 41613, 43049, 29881, 43836, 63928, 84719, 50701, 672926, 70340, 52233, 35132, 59903, 62683, 43770, 45070, 72072, 128427, 141911, 51918, 72763, 52496, 43635, 73940, 410043, 157804, 114187, 84375, 69766, 101868, 79773, 90144, 72229, 26001, 38428, 102726, 45244, 60778, 52193, 70500, 41182, 53256, 143481, 51620, 47898, 35607, 70752, 67196, 561469, 98260, 96245, 98003, 42221, 77180, 90098, 94643, 78735, 76559, 61278, 55039, 80711, 154513, 60648, 50015, 110064, 42864, 24747, 42174, 37270, 22733, 44461, 59571, 103121, 109236, 124452, 281687, 213536, 108696, 262853, 356915, 150587, 1319225, 491908, 328865, 406667, 327903, 188701, 263132, 113626, 123111, 108153, 109663, 138125, 130482, 185472, 166641, 162565, 169535, 121932, 179530, 158202, 168243, 152789, 142571, 108330, 188709, 1655404, 412839, 370361, 387120, 465959, 607194, 819815, 742354, 1001338, 1345869, 1406246, 1682576, 1006708, 800678, 611690, 640242, 375294, 467601, 423328, 402851, 532648, 917958, 459705, 376076, 402345, 196566, 330486, 581593, 261083, 142046, 223850, 124992, 245077, 148424, 227715, 140628, 203444, 119938, 149841, 156477, 182531, 91135, 510363, 382983, 284731, 282007, 174160, 101884, 291242, 143980, 122294, 135064, 141508, 96763, 141769, 93591, 92516, 93489, 347765, 342493, 219466, 228602, 143091, 234001, 741014, 586259, 311236, 445754, 282485, 372024, 424588, 178637, 194528, 231884, 323389, 310663, 150552, 193565, 257329, 112756, 148615, 124379, 178912, 248728, 202517, 174406, 369945, 359440, 184789, 89854, 85456, 95759, 103941, 86153, 86332, 75395, 84464, 84395, 374911, 188178, 156603, 194055, 201861, 237628, 131054, 212248, 227251, 106510, 89215, 63482, 65410, 72484, 117949, 84948, 151494, 56967, 63035, 130350, 57345, 52159, 330081, 178267, 130226, 127330, 55623, 139628, 65662, 144142, 197406, 115910, 94842, 133142, 135985, 37983, 29666, 130329, 96991, 77371, 159270, 63872, 137447, 230986, 279372, 107965, 52970, 79966, 73154, 134911, 90451, 69081, 32139, 45383, 110479, 25766, 25728, 103104, 174628, 119011, 50170, 73063, 62315, 675709, 437733, 148168, 82408, 808005, 1188856, 1030282, 680668, 718763, 1013287, 579018, 2106698, 1047932, 520447, 909278, 724339, 558704, 631720, 844980, 703731, 1467784, 580228, 907081, 687441, 492092, 684136, 809994, 738678, 2355667, 668843, 595257, 621795, 384108, 796923, 501342, 236341, 334741, 683735, 470441, 240816, 214400, 292976, 167032, 232574, 231552, 170055]};
+const $=s=>document.querySelector(s);
+const nf=(x,d=0)=>x==null?'-':Number(x).toLocaleString('ko-KR',{maximumFractionDigits:d,minimumFractionDigits:d});
+const pc=(x,d=0)=>x==null?'-':(x>0?'+':'')+nf(x,d)+'%';
+const cls=x=>x>0?'up':x<0?'down':'';
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+/* ---------- 데이터 (억원) ---------- */
+const PX=7740, SH=2365.08, NETCASH=430;           // 11/24 종가(Yahoo), 주식수(만주), 순현금(컨콜)
+const MC=PX*SH/1e4;                                // 억원
+const Q=[ // 분기 실적: 삼성증권 1Q25~2Q26, 키움 3Q26
+ {q:'1Q25',rev:68,op:-0.3,ni:3},{q:'2Q25',rev:78,op:2.9,ni:-1},{q:'3Q25',rev:88,op:7.7,ni:14},{q:'4Q25',rev:81,op:2.0,ni:24},
+ {q:'1Q26',rev:74,op:1.4,ni:8},{q:'2Q26',rev:83,op:4.3,ni:8},{q:'3Q26',rev:89,op:8.5,ni:null}];
+const SEG={q:['1Q25','2Q25','3Q25','4Q25','1Q26','2Q26'],
+ 산과:[19,21,23,22,22,22],암검사:[26,30,32,29,30,30],유전희귀:[14,11,15,14,14,16],검진:[8,16,18,16,9,15]};
+const Y=[{y:'2023',rev:273,op:2},{y:'2024',rev:259,op:-12},{y:'2025',rev:315,op:12},{y:'2026E',rev:347,op:28,e:1},{y:'2027E',rev:410,op:41,e:1}];
+const NIPT={y:['2023','2024','2025','1H26','3Q26'],v:[14000,18000,25200,14000,11300]};
+const ICS={y:['2024','2025','1H26','3Q26'],v:[900,5100,4100,4200]};
+const JP={q:['1Q26','2Q26','3Q26','4Q26E','2027E(회사)'],v:[0,5,7,10,100]};
+
+const PEERS=[{"t": "GRAL", "n": "Grail", "cur": "USD", "px": 103.55, "mc": 4655833088, "rev": 166604000, "rg": 0.037, "opm": -3.32038, "gm": 0.46679002, "ps": 27.945505, "ni": -406177984, "y52": -0.10906643, "name": "GRAIL, Inc."}, {"t": "GH", "n": "Guardant Health", "cur": "USD", "px": 154.17, "mc": 20857036800, "rev": 1278883968, "rg": 0.361, "opm": -0.39403, "gm": 0.65190005, "ps": 16.308779, "ni": -485072992, "y52": 0.31083143, "name": "Guardant Health, Inc."}, {"t": "NTRA", "n": "Natera", "cur": "USD", "px": 292.39, "mc": 42397876224, "rev": 2908875008, "rg": 0.341, "opm": -0.085360005, "gm": 0.65142995, "ps": 14.575352, "ni": -164714000, "y52": 0.14594686, "name": "Natera, Inc."}, {"t": "394800.KQ", "n": "쓰리빌리언", "cur": "KRW", "px": 6140.0, "mc": 195390472192, "rev": 9783881728, "rg": 1.025, "opm": -0.71685, "gm": 1.0, "ps": 19.97065, "ni": -5966963712, "y52": -0.45327103, "name": "3billion, Inc."}, {"t": "228760.KQ", "n": "지노믹트리", "cur": "KRW", "px": 8070.0, "mc": 198078119936, "rev": 2946381056, "rg": -0.511, "opm": -3.9839802, "gm": -0.0558, "ps": 67.2276, "ni": -9026676736, "y52": -0.6745417, "name": "Genomictree Inc."}, {"t": "461030.KQ", "n": "아이엠비디엑스", "cur": "KRW", "px": 2120.0, "mc": 30389176320, "rev": 5599463424, "rg": -0.0, "opm": -1.5375, "gm": 0.28047, "ps": 5.427159, "ni": -7588599808, "y52": -0.77558637, "name": "IMB Dx, Inc."}, {"t": "340450.KQ", "n": "지씨지놈", "cur": "KRW", "px": 7740.0, "mc": 183057137664, "rev": 32637421568, "rg": 0.062, "opm": 0.04737, "gm": 0.46627998, "ps": 5.6088114, "ni": 5415054848, "y52": 0.1942215, "name": "GC Genome Corporation"}];
+/* ---------- 탭 ---------- */
+const PAGES=[['sum','요약'],['fin','실적'],['kpi','성장 지표'],['tech','기술 이해'],['peer','글로벌 비교'],['us','미국·일본'],['val','밸류'],['px','주가'],['pitch','5분 피칭'],['qa','예상 질의'],['src','출처']];
+let charts=[];
+function nav(){const h=(location.hash||'#sum').slice(1);document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===h));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.p===h));window.scrollTo(0,0);draw(h)}
+function card(h,cap,body){return `<div class="card"><h2>${h}</h2>${cap?`<p class="cap">${cap}</p>`:''}${body}</div>`}
+function kpi(l,v,s,go){return `<button class="kpi" onclick="location.hash='${go}'"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></button>`}
+
+function build(){
+ $('#tabs').innerHTML=PAGES.map(([k,n])=>`<a class="tab" data-p="${k}" href="#${k}">${n}</a>`).join('');
+ const ttmRev=Q.slice(-4).reduce((a,b)=>a+b.rev,0), ttmOp=Q.slice(-4).reduce((a,b)=>a+b.op,0);
+ const ev=MC-NETCASH;
+ let H='';
+ /* 요약 */
+ H+=`<section class="page" id="sum"><div class="page-head"><h1>지씨지놈 (340450) · 분할 매수</h1><p>국내 흑자 본업 가격에 미국 췌장암 검사 옵션을 0으로 얹은 종목 · 11/24 종가 ${nf(PX)}원(Yahoo)</p></div>
+ <div class="kpis">
+ ${kpi('시가총액',nf(MC)+'억',`순현금 ${NETCASH}억 = 시총의 ${nf(NETCASH/MC*100)}%`,'val')}
+ ${kpi('EV / 2026E 매출',nf(ev/347,1)+'배',`삼성 기준 글로벌 피어 20~35배`,'val')}
+ ${kpi('최근 4분기 매출',nf(ttmRev)+'억',`영업이익 ${nf(ttmOp)}억 · 3Q26 OPM 9.5%`,'fin')}
+ ${kpi('G-NIPT 3Q26',nf(11300)+'건','YoY +46.8% · QoQ +61.4%','kpi')}
+ ${kpi('아이캔서치 3Q26',nf(4200)+'건','YoY +147% · QoQ +133%','kpi')}
+ ${kpi('PancSight 1/2기 민감도','87.5%','특이도 95.4% · 가던트 쉴드 1기 58%','us')}
+ </div>
+ <div class="two">
+ ${card('한 장 요약','',`<table class="vs"><tbody>
+ <tr><td>의견</td><td>분할 매수 · Base 8,800원(+14%) · Bull 12,200원(+58%) · Bear 5,500원(-29%)</td></tr>
+ <tr><td>싼 이유</td><td>EV/매출 ${nf(ev/347,1)}배(2026E) vs 가던트·나테라·그레일 20~35배. 미국 매출 0원 가정에서도 국내 본업이 흑자</td></tr>
+ <tr><td>본업</td><td>2025 흑자전환(매출 315억·영업이익 12억) → 2026E 347억·28억(키움), 회사는 370억·하이싱글 OPM</td></tr>
+ <tr><td>현금</td><td>순현금 약 430억(IPO 400억 미사용) → 이자수익으로 순이익 > 영업이익</td></tr>
+ <tr><td>옵션</td><td>일본: 아이캔서치 2Q 5억 → 3Q 7억 → 4Q 10억 / G-NIPT 1월 인가 신청<br>미국: PancSight BDD 1Q27 → FDA 27년 중순 → 보험 2H27 → 매출 1H28</td></tr>
+ <tr><td>수급·지배구조</td><td>녹십자 외 42.6%, 보호예수 전량 해제(반기보고서 기준), 유통 57.5%</td></tr>
+ <tr><td>유동성</td><td>20일 평균 거래대금 44억, 연 변동성 65%, 펌텍과 상관계수 0.27</td></tr>
+ </tbody></table>`)}
+ ${card('촉매 타임라인','회사 컨콜(11/6)·키움(11/20)·삼성(11/2) 기준. 회사 계획이라 지연 가능',`<div class="tl">
+ <div class="st"><div class="w">4Q26</div><div class="e">재출시 지연분 10억 인식</div><div class="x">리스크스크린·지놈헬스</div></div>
+ <div class="st"><div class="w">12월~1Q27</div><div class="e">FDA BDD 신청</div><div class="x">혁신의료기기, 60일 내 결정</div><span class="pill wait">대기</span></div>
+ <div class="st"><div class="w">2027.1~3</div><div class="e">G-NIPT 일본 인가</div><div class="x">2Q27부터 매출</div><span class="pill wait">대기</span></div>
+ <div class="st"><div class="w">연말</div><div class="e">GC랩텍 연결 편입 결정</div><div class="x">녹십자홀딩스 지분 일부 인수 논의</div></div>
+ <div class="st"><div class="w">27년 중순</div><div class="e">FDA 허가·가던트 계약</div><div class="x">7~8월 본계약 예상(회사)</div></div>
+ <div class="st"><div class="w">1H28</div><div class="e">미국 매출 개시</div><div class="x">2028 $30M → 2030 $100M(회사 목표)</div></div>
+ </div>`)}
+ </div></section>`;
+ /* 실적 */
+ H+=`<section class="page" id="fin"><div class="page-head"><h1>실적</h1><p>억원, 연결. 1Q25~2Q26 삼성증권(Quantiwise), 3Q26 키움(11/20). 3Q26 순이익은 미확인</p></div>
+ <div class="two">${card('분기 매출과 영업이익률','',`<div class="ch-box"><canvas id="cQ"></canvas></div>`)}
+ ${card('연간 매출·영업이익','2026E 키움, 2027E 내 추정(매출 +18%, OPM 10%)',`<div class="ch-box"><canvas id="cY"></canvas></div>`)}</div>
+ ${card('외울 숫자','YoY는 같은 분기 비교',`<div class="tw"><table><thead><tr><th>분기</th><th class="n">매출</th><th class="n">YoY</th><th class="n">영업이익</th><th class="n">OPM</th><th class="n">순이익</th></tr></thead><tbody>${Q.map((r,i)=>{const p=i>=4?Q[i-4]:null;const y=p?(r.rev/p.rev-1)*100:null;return `<tr><td>${r.q}</td><td class="n">${nf(r.rev)}</td><td class="n ${cls(y)}">${pc(y)}</td><td class="n">${nf(r.op,1)}</td><td class="n">${nf(r.op/r.rev*100,1)}%</td><td class="n">${r.ni==null?'미확인':nf(r.ni)}</td></tr>`}).join('')}
+ <tr><td><b>2025</b></td><td class="n"><b>315</b></td><td class="n up">+22%</td><td class="n"><b>12</b></td><td class="n">3.8%</td><td class="n"><b>40</b></td></tr>
+ <tr><td><b>최근 4분기</b></td><td class="n"><b>${nf(ttmRev)}</b></td><td></td><td class="n"><b>${nf(ttmOp)}</b></td><td class="n">${nf(ttmOp/ttmRev*100,1)}%</td><td></td></tr></tbody></table></div>
+ <div class="note" style="margin-top:10px">3Q26 매출 +1.2% YoY에 그친 건 리스크스크린·지놈헬스 재출시가 7월→9월로 밀려 약 10억이 4Q26로 넘어갔기 때문(키움). 하반기 검진 성수기 계절성이 있어 4Q가 가장 큼.</div>`)}
+ ${card('사업부 매출 (억원)','1H26 비중: 암검사 38% · 산과 28% · 유전희귀 19% · 검진 15% / 내수 98%',`<div class="ch-box"><canvas id="cS"></canvas></div>`)}
+ </section>`;
+ /* 성장 지표 */
+ H+=`<section class="page" id="kpi"><div class="page-head"><h1>성장 지표</h1><p>검사 건수와 거래처 · 회사·키움·삼성</p></div>
+ <div class="two">${card('G-NIPT(산전 선별) 검사 건수','2026 목표 3만 건(+20%). 3Q26 11,300건 YoY +46.8%',`<div class="ch-box"><canvas id="cN"></canvas></div>`)}
+ ${card('아이캔서치(다중암 조기진단) 검사 건수','2024 출시 → 2025 5배. 3Q26 4,200건 YoY +147%',`<div class="ch-box"><canvas id="cI"></canvas></div>`)}</div>
+ <div class="two">${card('아이캔서치 거래처','',`<ul class="def"><li>국내 기업 거래처 120개(1H26) → 연내 160~170개 목표</li><li>상급종합병원 보급률 100%, 일반 종합병원 40%(삼성)</li><li>삼성그룹 임직원 검진(약 7만 명, 가족 포함 23만 명) → LG·대한항공·기아·한수원 추가(1H26)</li><li>일본 거래처 33개(도쿄 캔서클리닉, 쇼와의대 등)</li><li>국내 암 스크리닝 점유율 사실상 100%(회사 주장)</li></ul>`)}
+ ${card('판가 사다리','같은 검사가 해외로 가면 단가가 몇 배가 되는지',`<table><thead><tr><th>검사</th><th class="n">한국</th><th class="n">일본</th><th class="n">미국</th></tr></thead><tbody>
+ <tr><td>G-NIPT</td><td class="n">35만원</td><td class="n">120~160만원</td><td class="n">240~320만원</td></tr>
+ <tr><td>아이캔서치 / PancSight</td><td class="n">30~40만원</td><td class="n">3~4배</td><td class="n">$1,000~1,200(5~6배)</td></tr></tbody></table>
+ <p class="cap" style="margin-top:8px">회사는 국내 OPM 20%, 미국 40~50% 가능하다고 설명(컨콜). 미국은 가던트와 매출 배분(가던트 4 : 랩텍 6) 논의 중으로 미확정.</p>`)}</div>
+ </section>`;
+
+ /* 기술 */
+ H+=`<section class="page" id="tech"><div class="page-head"><h1>기술 이해</h1><p>피 한 번 뽑아 암 신호를 찾는 방식 · 회사 IR 자료와 개념도</p></div>
+ ${card('검사가 돌아가는 순서','아이캔서치(다중암)와 PancSight(췌장암)는 같은 원리',`<div class="flow">
+ <div class="b"><b>① 채혈 10mL</b><span>건강검진 때 함께. 경쟁사는 20~40mL</span></div><div class="ar">→</div>
+ <div class="b"><b>② cfDNA 추출</b><span>죽은 세포가 혈액에 흘린 DNA 조각. 암이 있으면 암세포 조각이 섞임</span></div><div class="ar">→</div>
+ <div class="b"><b>③ 저밀도 전장유전체 시퀀싱</b><span>샘플당 10Gb만 읽어 1회 200건 처리(메틸화 방식 100Gb·20건)</span></div><div class="ar">→</div>
+ <div class="b"><b>④ AI 판독</b><span>조각 길이·끝부분 서열·뉴클레오솜 위치·구간별 복제수 변화를 함께 학습</span></div><div class="ar">→</div>
+ <div class="b"><b>⑤ 결과 7일</b><span>10종 암 신호 여부와 의심 부위</span></div></div>`)}
+ <div class="two">${card('왜 조각 길이를 보나 (개념도)','정상 cfDNA는 뉴클레오솜 1개 길이(약 167bp)에서 봉우리, 암 유래 조각은 더 짧은 쪽으로 치우침. 실제 데이터가 아닌 개념도 · 근거: Bae et al., Nat Commun 2023(KAIST·지씨지놈)',`<div class="ch-box"><canvas id="cFrag"></canvas></div>`)}
+ ${card('메틸화 방식과 무엇이 다른가','회사 설명(컨콜 11/6)과 키움 비교표',`<table class="vs"><thead><tr><th></th><th>지씨지놈 (조각 패턴)</th><th>Grail·가던트 등 (메틸화)</th></tr></thead><tbody>
+ <tr><td>읽는 것</td><td>DNA 조각의 길이·모양·끝 서열 + 복제수</td><td>암에서 바뀐 DNA 메틸화 표지</td></tr>
+ <tr><td>조기암</td><td>초기에도 조각 신호가 나온다는 주장. 췌장암 1기 민감도 87.5%(10월 컷오프)</td><td>암이 어느 정도 자라야 메틸화 신호가 뚜렷. 가던트 1기 58%(회사 비교)</td></tr>
+ <tr><td>비용·처리량</td><td>샘플당 10Gb, 1회 200건</td><td>100Gb·20건(전장), 12Gb·188건(표적)</td></tr>
+ <tr><td>약점</td><td>특이도 94.5%로 낮은 편 → 양성 중 실제 암 비율이 낮음</td><td>특이도 99%대, 대신 민감도 낮음(Galleri 전향 35~40%)</td></tr></tbody></table>`)}</div>
+ ${card('민감도·특이도·PPV 한 번에 읽기','검진 인구의 연간 암 유병률을 0.8%로 두었을 때 · PPV = 양성 판정 중 실제 암 비율',`<div class="two"><div class="ch-box"><canvas id="cPPV"></canvas></div><div><ul class="def"><li><b>아이캔서치</b> 민감도 84.5% · 특이도 94.5% → PPV 약 <b>11%</b>. 많이 잡고 많이 틀리는 설계</li><li><b>Galleri</b> 민감도 35~40%(전향) · 특이도 99.85% → PPV 약 <b>65%</b>. 적게 잡고 거의 안 틀림</li><li>한국은 추가 영상검사가 싸서 민감도 중심 설계가 맞지만, 미국 승인·보험에서는 특이도가 핵심 쟁점</li><li>그래서 미국은 다중암이 아니라 대체 검사가 없는 <b>췌장암 단일암</b>(특이도 95.4%)으로 먼저 감</li><li>연구 설계가 달라(사례-대조 vs 전향) 직접 비교가 아닌 구조 비교</li></ul></div></div>`)}
+ <div class="two">${card('제품 포트폴리오','자료: 지씨지놈 IR',`<img class="fig" src="img/ir_portfolio.jpg" alt="지씨지놈 제품 포트폴리오: 산과·암·유전희귀·검진 검사"><p class="figcap">핵심기술 두 개: G-NIPT(산전), 아이캔서치(다중암)</p>`)}
+ ${card('아이캔서치 vs 경쟁 검사','자료: 지씨지놈 IR 2026(컨콜 자료)',`<img class="fig" src="img/ir_mced.jpg" alt="아이캔서치와 I사, G사 비교표"><p class="figcap">I사는 국내 메틸화 경쟁사, G사는 가던트 쉴드(대장암 1종). 임상 검체 11,387명은 암환자:건강인 1:3 사례-대조</p>`)}</div>
+ <div class="two">${card('돈 버는 구조 ① 검사 서비스','자료: 지씨지놈 IR',`<img class="fig" src="img/ir_service.jpg" alt="직접·간접 검사 서비스 모델"><p class="figcap">간접 모델의 파트너가 녹십자의료재단 → 1H26 매출의 83.6%가 특수관계자(재단)</p>`)}
+ ${card('돈 버는 구조 ② 해외 기술 수출','자료: 지씨지놈 IR',`<img class="fig" src="img/ir_licensing.jpg" alt="해외 Lab 마일스톤·로열티 모델"><p class="figcap">미국은 GC랩텍에 2023.4 독점 라이선스($10.3M, 누적 수취 6.7억). 상업화·보험·FDA 단계별 기술료 → 매출 대비 로열티</p>`)}</div>
+ </section>`;
+ /* 글로벌 비교 */
+ const fx=1400;
+ const pr=PEERS.map(p=>({...p,mcK:p.cur==='USD'?p.mc*fx/1e8:p.mc/1e8,revK:p.cur==='USD'?p.rev*fx/1e8:p.rev/1e8}));
+ H+=`<section class="page" id="peer"><div class="page-head"><h1>글로벌 비교</h1><p>Yahoo Finance 11/24 · 달러는 1,400원 환산 · 매출·이익은 최근 4분기</p></div>
+ ${card('밸류와 수익성','지씨지놈만 흑자, P/S는 가장 낮은 편',`<div class="tw"><table><thead><tr><th>회사</th><th>주력</th><th class="n">시총(억원)</th><th class="n">매출(억원)</th><th class="n">매출 성장</th><th class="n">영업이익률</th><th class="n">P/S</th><th class="n">1년 주가</th></tr></thead><tbody>${pr.map(p=>{const biz={GRAL:'다중암 조기검출 Galleri',GH:'대장암 혈액검사 Shield, 암 정밀',NTRA:'NIPT·MRD(재발 모니터링)','394800.KQ':'AI 희귀질환 유전체 해석','228760.KQ':'메틸화 암 조기진단','461030.KQ':'액체생검 다중암(국내)','340450.KQ':'NIPT·다중암·암 정밀'}[p.t];return `<tr${p.t==='340450.KQ'?' style="font-weight:700"':''}><td>${p.n}</td><td class="d">${biz}</td><td class="n">${nf(p.mcK)}</td><td class="n">${nf(p.revK)}</td><td class="n ${cls(p.rg)}">${pc(p.rg*100)}</td><td class="n ${cls(p.opm)}">${pc(p.opm*100)}</td><td class="n">${nf(p.ps,1)}배</td><td class="n ${cls(p.y52)}">${pc(p.y52*100)}</td></tr>`}).join('')}</tbody></table></div>`)}
+ <div class="two">${card('P/S (최근 4분기 매출 대비 시총)','',`<div class="ch-box"><canvas id="cPS"></canvas></div>`)}
+ ${card('영업이익률','',`<div class="ch-box"><canvas id="cOPM"></canvas></div>`)}</div>
+ ${card('검사별 비교','회사·IR·Grail/Guardant 공시 기준 · 연구 설계가 달라 직접 비교 아님',`<div class="tw"><table><thead><tr><th></th><th>아이캔서치 (지씨지놈)</th><th>Galleri (Grail)</th><th>Shield (가던트)</th><th>PancSight (지씨지놈·미국)</th></tr></thead><tbody>
+ <tr><td>대상</td><td>10종 암(2028 20종)</td><td>50종 이상 + 발생 부위</td><td>대장암 1종(+MCD 10종 개발)</td><td>췌장암 1종</td></tr>
+ <tr><td>방식</td><td>저밀도 전장 시퀀싱 + AI</td><td>표적 메틸화</td><td>메틸화·변이</td><td>cfDNA 조각 + 면역세포 유래 비율</td></tr>
+ <tr><td>민감도 / 특이도</td><td>84.5% / 94.5%</td><td>35~40% / 99.6~99.85%(전향)</td><td>83% / 90%</td><td>1·2기 87.5% / 95.4%</td></tr>
+ <tr><td>가격</td><td>국내 약 37만원 · 일본 ¥165,000</td><td>정가 $949</td><td>약 $1,000(회사 비교)</td><td>$1,000~1,200 목표</td></tr>
+ <tr><td>연간 검사</td><td>2025 5,100 → 2026E 1.2만 건</td><td>2025 18.5만+ 건</td><td>2026E 27~28.5만 건</td><td>1H28 개시 목표</td></tr>
+ <tr><td>규제</td><td>국내·일본 상용</td><td>LDT 판매, FDA 자문위 찬성 7·반대 2(9/23)</td><td>FDA 승인·메디케어 급여</td><td>BDD 신청 예정 → 27년 허가 목표</td></tr></tbody></table></div>`)}
+ ${card('쓰리빌리언은 왜 같이 보나','',`<ul class="def"><li>사업은 다름: 쓰리빌리언은 AI로 희귀질환 유전체를 해석하는 서비스(해외 B2B 비중 높음), 지씨지놈은 검사실 기반 NIPT·암 검사</li><li>같은 '국내 상장 유전체' 바스켓으로 움직임: 상장 이후 일간 수익률 상관계수 0.39</li><li><b>GVA는 쓰리빌리언을 주식이 아닌 CB 25억 + 전환우선주 25억(전환가 12,501원)으로 보유</b>. 현재가 ${nf(6140)}원은 전환가의 절반 → 적자·고밸류 바이오는 조건으로 사는 하우스</li><li>지씨지놈은 흑자·순현금으로 같은 업종 안에서 '주식으로 살 수 있는' 쪽</li></ul>`)}
+ </section>`;
+ /* 미국·일본 */
+ H+=`<section class="page" id="us"><div class="page-head"><h1>미국·일본</h1><p>가격에 0으로 둔 옵션</p></div>
+ <div class="two">${card('일본 아이캔서치 매출 (억원)','2026 약 20억 예상, 2027 일본 매출 100억 목표(회사)',`<div class="ch-box"><canvas id="cJ"></canvas></div>`)}
+ ${card('췌장암 조기진단 성능 비교','후향적 결과. 키움·삼성·컨콜 정리',`<div class="tw"><table><thead><tr><th>제품</th><th class="n">민감도</th><th class="n">특이도</th><th class="n">1/2기 민감도</th><th>상태</th></tr></thead><tbody>
+ <tr><td><b>PancSight(지씨지놈)</b></td><td class="n">95.0%</td><td class="n">95.6%</td><td class="n"><b>87.5~91.7%</b></td><td>BDD 신청 예정</td></tr>
+ <tr><td>PDACatch(S사)</td><td class="n">84.0%</td><td class="n">89.0%</td><td class="n">75.4%</td><td>2023 출시</td></tr>
+ <tr><td>Avantect(C사)</td><td class="n">68.3%</td><td class="n">96.9%</td><td class="n">68.3%</td><td>2023 출시</td></tr>
+ <tr><td>PancreaSure(Immunovia)</td><td class="n">-</td><td class="n">94%</td><td class="n">78%(고위험군)</td><td>2025.9 LDT, CMS $897</td></tr>
+ <tr><td>Freenome(대장암)</td><td class="n">81%</td><td class="n">90.4%</td><td class="n">-</td><td>2026.7 FDA 승인</td></tr>
+ <tr><td>메디케어 등재 기준</td><td class="n">74%</td><td class="n">90%</td><td class="n">-</td><td>회사가 들은 가이던스</td></tr></tbody></table></div>`)}</div>
+ ${card('미국 구조: 지씨지놈 몫은 얼마인가','가장 많이 받을 질문',`<ul class="def">
+ <li>미국 사업 주체는 관계사 <b>GC랩텍</b>(CLIA 실험실). 지씨지놈 지분 24.1% → 컨버터블 노트 전환 시 31%(내년 상반기), 지씨지놈은 로열티 수취</li>
+ <li>최대주주 녹십자홀딩스 51% → 지씨지놈이 일부를 가져와 연결 편입하는 방안 논의, 연말 결정 예정</li>
+ <li>유통: 가던트헬스와 계약 협의. 매출 배분 4:6(가던트:랩텍) 논의 중, 미확정</li>
+ <li>회사 목표: 2028 $3,000만(대상 200만 명 × 채택률 1.5% × $1,000), 2030 $1억</li>
+ <li>벤치마크: 가던트 쉴드 2024.9 출시 후 매출 급증, 가던트 시총 2년 만에 약 5조 → 30조원(컨콜 설명) / 그레일 Galleri 2Q26 6.1만 건(+35%), FDA 자문위 찬성 7·반대 2</li>
+ <li class="up">리스크: 후향적 데이터 기준. 그레일은 전향적 연구에서 민감도가 최대 40% 떨어졌음(삼성)</li></ul>`)}
+ </section>`;
+ /* 밸류 */
+ H+=`<section class="page" id="val"><div class="page-head"><h1>밸류에이션</h1><p>EV/매출 방식. 숫자를 바꾸면 바로 계산됩니다</p></div>
+ <div class="kpis">${kpi('지금 EV',nf(ev)+'억','시총 '+nf(MC)+' − 순현금 '+NETCASH,'val')}${kpi('EV/최근 4분기 매출',nf(ev/ttmRev,1)+'배','LTM P/S 7배(삼성, 11/2)','val')}${kpi('PER 2026E',nf(PX/258,1)+'배','키움 EPS 258원','val')}${kpi('PBR',nf(PX/3377,2)+'배','BPS 3,377원','val')}</div>
+ ${card('시나리오','2027E 매출 410억(2026E 347억 × 1.18, 회사 "15~20% 성장")',`<div class="ch-box"><canvas id="cV"></canvas></div><div class="tw"><table><thead><tr><th>시나리오</th><th>가정</th><th class="n">주가</th><th class="n">지금 대비</th></tr></thead><tbody>
+ <tr><td class="down"><b>Bear</b></td><td>국내 성장 둔화. 2026E 매출 347억 × EV/매출 2.5배 + 순현금 430억 (52주 저점 4,310원 부근)</td><td class="n">5,500</td><td class="n down">-29%</td></tr>
+ <tr><td><b>Base</b></td><td>미국 0원. 2027E 410억 × 4.0배(지금 수준) + 430억</td><td class="n">8,800</td><td class="n up">+14%</td></tr>
+ <tr><td class="up"><b>Bull</b></td><td>BDD 지정·가던트 계약으로 미국 가시화. 410억 × 6.0배(삼성 LTM 7배 아래) + 430억</td><td class="n">12,200</td><td class="n up">+58%</td></tr></tbody></table></div>`)}
+ ${card('직접 계산','',`<div class="fin-in">
+ <label>2027E 매출(억)<input type="number" id="vR" value="410"></label>
+ <label>EV/매출(배)<input type="number" id="vM" value="4" step="0.5"></label>
+ <label>순현금(억)<input type="number" id="vC" value="430"></label>
+ <label>미국 옵션 가치(억)<input type="number" id="vU" value="0" step="100"></label></div>
+ <div>적정 주가 <span class="big" id="vOut"></span> <span id="vUp"></span></div>
+ <p class="cap" style="margin-top:6px">미국 옵션 예: 2030 GC랩텍 매출 $1억(약 1,400억) × 지분 31% × 순이익률 30% × PER 20배 ÷ 현재가치 할인 → 회사 숫자를 그대로 믿을 때 수백억~1천억대. 가정이 많아 Base에는 넣지 않음.</p>`)}
+ ${card('국내 유전체 비교','11/24 Yahoo, 쓰리빌리언은 GVA가 메자닌 약 50억 보유',`<table class="vs"><thead><tr><th></th><th class="n">지씨지놈</th><th class="n">쓰리빌리언</th></tr></thead><tbody>
+ <tr><td>시총</td><td class="n">${nf(MC)}억</td><td class="n">약 1,950억</td></tr><tr><td>PBR</td><td class="n">2.3배</td><td class="n">7.7배</td></tr><tr><td>PER</td><td class="n">약 30배(26E)</td><td class="n">131배</td></tr><tr><td>영업이익</td><td class="n">흑자(최근 4분기 ${nf(ttmOp)}억)</td><td class="n">미미</td></tr><tr><td>GVA 보유</td><td class="n">없음</td><td class="n">CB 25억 + 전환우선주 25억(전환가 12,501원)</td></tr></tbody></table>`)}
+ </section>`;
+ /* 주가 */
+ H+=`<section class="page" id="px"><div class="page-head"><h1>주가</h1><p>상장(2025.6.11) 이후 일봉 · Yahoo</p></div>
+ <div class="bar"><span class="lbl">기간</span><div class="seg" id="rng"><button data-r="60">3개월</button><button data-r="125">6개월</button><button data-r="0" class="on">상장 이후</button></div></div>
+ ${card('지씨지놈 종가','고점 10,810원(상장 다음날) · 저점 4,310원(2026.7.30)',`<div class="ch-box tall"><canvas id="cP"></canvas></div>`)}
+ ${card('상대 수익률 (상장일 = 100)','쓰리빌리언과 상관계수 0.39, 펌텍과 0.27. 펌텍이 3% 넘게 빠진 55일 동안 지씨지놈 평균 -1.6%',`<div class="ch-box"><canvas id="cR"></canvas></div>`)}
+ </section>`;
+ /* 피칭 */
+ H+=`<section class="page" id="pitch"><div class="page-head"><h1>5분 피칭</h1><p>탑다운 → 바텀업 → GVA · 1분 약 300자 기준</p></div>
+ ${card('연결 멘트 (펌텍 → 지씨지놈, 20초)','',`<div class="script"><p>펌텍이 시장이 인정하기 시작한 성장을 합리적인 가격에 사는 아이디어라면, 두 번째는 국내에서 이미 돈을 버는 본업 가격에 미국이라는 옵션을 공짜로 얹는 아이디어입니다. 하나는 K뷰티 소비, 하나는 진단 의료라 상장 이후 상관계수는 0.27이고, 펌텍이 3% 넘게 빠진 날 두 번째 종목은 평균 1.6% 빠졌습니다. 두 번째는 지씨지놈입니다.</p></div>`)}
+ ${card('스크립트','',`<div class="script">
+ <p><span class="tg">[0:00 결론]</span>지씨지놈, 분할 매수 의견입니다. 미국 매출을 0으로 두고 국내 본업만 지금 배수로 계산해도 8,800원, 14%가 남습니다. 내년 상반기 미국 FDA 혁신의료기기 지정과 가던트헬스 유통 계약이 확인되면 EV/매출 6배로 1만 2천원, 58%입니다. 하방은 국내 성장이 꺾여 배수가 2.5배로 내려가는 5,500원, -29%로, 상장 이후 저점 부근입니다.</p>
+ <p><span class="tg">[0:30 탑다운]</span>미국에서 혈액으로 암을 찾는 액체생검이 가장 빠르게 크는 진단 시장이 됐습니다. 가던트헬스는 대장암 검사 '쉴드'를 낸 뒤 시총이 2년 만에 5조에서 30조원대가 됐고, 그레일의 다중암 검사도 FDA 자문위원회에서 찬성 7, 반대 2를 받았습니다. 그런데 한국에서 같은 기술로 이미 흑자를 내는 회사는 EV/매출 4배에 거래되고, 미국 피어는 20~35배입니다.</p>
+ <p><span class="tg">[1:30 바텀업 1: 본업은 이미 돈을 법니다]</span>지씨지놈은 녹십자 계열의 유전체 검사 회사로 작년 흑자로 돌아섰습니다. 성장은 두 검사가 끌고 있습니다. 산전 검사 G-NIPT는 3분기 1만 1,300건으로 47% 늘었고, 다중암 조기진단 아이캔서치는 4,200건으로 2.5배가 됐습니다. 3분기 매출이 1%만 는 건 일부 검사 재출시가 두 달 밀려 10억원이 4분기로 넘어갔기 때문이고, 영업이익률은 9.5%로 올라왔습니다. 시총 1,830억 중 430억이 순현금입니다.</p>
+ <p><span class="tg">[2:30 바텀업 2: 해외는 단가가 다릅니다]</span>같은 검사가 국내 35만원, 일본 120~160만원, 미국은 240만원 이상입니다. 아이캔서치는 올해 일본에서 2분기 5억, 3분기 7억으로 늘었고, G-NIPT도 1월 일본 인가를 신청합니다. 미국은 췌장암 검사로 갑니다. 후향적 시험에서 1·2기 민감도 87.5%, 특이도 95.4%로, 대장암으로 FDA 승인을 받은 프리놈의 81%, 90%보다 높습니다. 1분기 혁신의료기기 신청, 27년 중순 허가, 28년 상반기 매출 개시가 회사 일정입니다.</p>
+ <p><span class="tg">[3:30 GVA 관점]</span>GVA는 같은 유전체 업종인 쓰리빌리언을 전환사채와 전환우선주로 담았습니다. 적자에 PBR 7.7배라 주식으로 사기 어려웠기 때문이라고 봤습니다. 지씨지놈은 흑자에 순현금이 시총의 4분의 1이고 PBR 2.3배라 주식으로 살 수 있는 유전체 회사입니다. 녹십자 계열이고 보호예수 물량도 모두 풀려 수급 부담이 없습니다.</p>
+ <p><span class="tg">[4:10 리스크와 접는 조건]</span>리스크는 두 가지입니다. 미국 사업은 관계사 GC랩텍이 하고 지씨지놈은 지분 24~31%와 로열티를 가져가는 구조라 몫이 제한되고, 그레일처럼 전향적 연구에서 민감도가 떨어질 수 있습니다. 그래서 미국은 밸류에 넣지 않았습니다. 국내 검사 건수 성장이 두 분기 연속 10% 아래로 내려가거나 FDA 혁신의료기기 지정이 안 되면 접겠습니다. 하루 거래대금이 40억대라 30억은 일주일이면 담을 수 있습니다.</p></div>`)}
+ </section>`;
+ /* 질의 */
+ const QA=[
+ ['미국 매출이 지씨지놈에 얼마나 들어오나?','미국 사업 주체는 관계사 GC랩텍입니다. 지분이 24.1%이고 내년 상반기 컨버터블 노트 전환으로 31%가 되며, 별도로 로열티를 받습니다. 녹십자홀딩스(51%) 지분 일부를 가져와 연결 편입하는 방안을 연말에 결정합니다. 몫이 불확실하기 때문에 Base에는 미국을 0으로 넣었습니다.'],
+ ['FDA를 통과할 근거는?','후향적 기준 1·2기 민감도 87.5%, 특이도 95.4%입니다. 7월 FDA 승인을 받은 프리놈(대장암)이 81%/90.4%이고, 회사가 들은 메디케어 등재 기준은 74%/90%입니다. 다만 아직 BDD 신청 전이라 일정은 회사 계획입니다.'],
+ ['전향적 연구에서 성능이 떨어지면?','실제로 그레일 갈레리는 전향적 연구에서 민감도가 최대 40% 떨어졌습니다(삼성). 그래서 미국은 옵션으로만 두고, 매수 근거는 국내 흑자와 순현금입니다. 특이도를 유지하는지가 관건입니다.'],
+ ['3분기 매출이 1%밖에 안 늘었는데?','리스크스크린·지놈헬스 재출시가 7월에서 9월로 밀려 약 10억이 4분기로 넘어갔습니다. 대신 G-NIPT +47%, 아이캔서치 +147%로 핵심 검사는 늘었고 영업이익률은 9.5%로 올랐습니다.'],
+ ['아이캔서치 건수가 2배인데 매출은 왜 덜 늘었나?','검진 매출에는 다른 검사도 있고, 5년 전 출시한 검사 업그레이드로 일부를 중단했습니다. 아이캔서치 상반기 매출은 약 13억이고, 없었다면 검진 매출이 20~30% 줄었을 거라고 회사가 설명했습니다.'],
+ ['순이익이 영업이익보다 큰 이유는?','IPO 자금 400억을 아직 쓰지 않아 이자수익이 나고, 금융손익이 개선됐습니다. 그래서 PER은 순이익 기준으로 낮아 보여도, 저는 EV/매출로 봅니다.'],
+ ['왜 쓰리빌리언이 아니라 지씨지놈인가?','같은 시총(약 1,900억)에 매출이 3~4배이고 흑자입니다. PBR은 2.3배 vs 7.7배입니다. GVA가 쓰리빌리언을 메자닌으로 담은 걸 보면, 주식으로 담을 수 있는 쪽은 지씨지놈이라고 봤습니다.'],
+ ['밸류 배수는 왜 그 숫자인가?','지금 EV/2026E 매출이 4배라 Base는 현재 배수 유지, Bull 6배는 삼성이 말한 LTM 7배와 미국 피어 20~35배 사이에서 보수적으로, Bear 2.5배는 상장 이후 저점(4,310원) 수준입니다.'],
+ ['녹십자의료재단 의존도는?','1H26 매출의 85.3%가 특수관계자이고 그중 녹십자의료재단이 83.6%입니다. 재단이 병·의원 검체를 받아 지씨지놈이 분석하는 검사실 운영 계약(2019~) 구조입니다. 국내 5대 의료재단이라 영업망은 강점이지만, 계약 조건이 바뀌면 바로 실적에 영향이 갑니다.'],
+ ['가던트가 왜 남의 췌장암 검사를 팔아주나?','가던트는 메틸화 기반 10종 다중암 검사(Shield MCD)를 자체 보유합니다. 그래서 고위험군 보완용으로 단일암 췌장 검사를 유통할 유인이 있는지, 본계약 조건(수수료율)에서 확인해야 합니다. 현재는 MOU·협의 단계입니다.'],
+ ['수급 이슈는?','녹십자 19.6%, 특수관계인 22.9%, 유통 57.5%이고 보호예수는 반기보고서 기준 전량 해제됐습니다. 회사는 더 이상 수급 이슈가 없다고 했습니다.'],
+ ['펌텍과 같이 들어도 되나?','상장 이후 상관계수 0.27입니다. 펌텍이 3% 넘게 빠진 55일 동안 지씨지놈은 평균 -1.6%였습니다. 변동성은 연 65%로 펌텍과 비슷한 수준입니다.']];
+ H+=`<section class="page" id="qa"><div class="page-head"><h1>예상 질의</h1><p>눌러서 답 보기</p></div>${card('','',`<div class="qa">${QA.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`)}</section>`;
+ H+=`<section class="page" id="src"><div class="page-head"><h1>출처와 확인할 것</h1></div>${card('출처','',`<ul class="def"><li>지씨지놈 컨콜 메모(2026.11.6, 노션)</li><li>키움증권 「지놈 아저씨 미국 간대요」(2026.11.20, Not Rated)</li><li>삼성증권 「내실을 다지면서 미국 진출 순항 중」(2026.11.2, Not Rated)</li><li>주가: Yahoo Finance(11/24 종가 ${nf(PX)}원). 네이버 표시가와 다를 수 있음</li><li>GVA 쓰리빌리언 보유: DART 전환사채·유상증자 결정(2026.4.23)</li></ul>`)}
+ ${card('면접 전 확인','',`<ul class="def"><li>3Q26 순이익과 분기보고서 확정 숫자(DART 접속 제한으로 미확인)</li><li>11/24 종가: Yahoo 7,740원 vs 네이버 장중 7,690원</li><li>GC랩텍 로열티율과 연결 편입 결정</li><li>순현금 430억은 회사 설명 기준(삼성: 1H26 현금성 자산 420억)</li></ul>`)}</section>`;
+ $('#main').innerHTML=H;
+ $('#foot').textContent='리서치 정리 · 투자 권유 아님 · 이미지 출처: 지씨지놈 IR';
+ $('#stamp').textContent='기준 2026-11-24';
+ ['vR','vM','vC','vU'].forEach(id=>document.getElementById(id).addEventListener('input',calc));calc();
+ document.querySelectorAll('#rng button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#rng button').forEach(x=>x.classList.toggle('on',x===b));drawPx(+b.dataset.r)});
+}
+function calc(){const r=+$('#vR').value,m=+$('#vM').value,c=+$('#vC').value,u=+$('#vU').value;const p=(r*m+c+u)/SH*1e4;$('#vOut').textContent=nf(p)+'원';const up=(p/PX-1)*100;$('#vUp').innerHTML=`<span class="${cls(up)}">${pc(up)}</span>`}
+
+/* ---------- 차트 ---------- */
+function mk(id,cfg){const el=document.getElementById(id);if(!el)return;const old=Chart.getChart(el);if(old)old.destroy();Chart.defaults.color=css('--sub');Chart.defaults.borderColor=css('--grid');Chart.defaults.font.family='Pretendard Variable, Pretendard, sans-serif';new Chart(el,cfg)}
+function draw(h){
+ const c1=css('--c1'),c2=css('--c2'),c3=css('--c3'),c4=css('--c4'),c5=css('--c5');
+ const O={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10}}}};
+ if(h==='fin'){
+  mk('cQ',{data:{labels:Q.map(r=>r.q),datasets:[{type:'bar',label:'매출(억)',data:Q.map(r=>r.rev),backgroundColor:c1,yAxisID:'y'},{type:'bar',label:'영업이익(억)',data:Q.map(r=>r.op),backgroundColor:c2,yAxisID:'y'},{type:'line',label:'OPM(%)',data:Q.map(r=>+(r.op/r.rev*100).toFixed(1)),borderColor:c5,yAxisID:'y1',tension:.3}]},options:{...O,scales:{y:{beginAtZero:true},y1:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%'}}}}});
+  mk('cY',{data:{labels:Y.map(r=>r.y),datasets:[{type:'bar',label:'매출(억)',data:Y.map(r=>r.rev),backgroundColor:Y.map(r=>r.e?c1+'88':c1)},{type:'line',label:'영업이익(억)',data:Y.map(r=>r.op),borderColor:c2,yAxisID:'y1'}]},options:{...O,scales:{y:{beginAtZero:true},y1:{position:'right',grid:{display:false}}}}});
+  mk('cS',{type:'bar',data:{labels:SEG.q,datasets:[['산과',c1],['암검사',c2],['유전희귀',c3],['검진',c4]].map(([k,c])=>({label:k,data:SEG[k],backgroundColor:c}))},options:{...O,scales:{x:{stacked:true},y:{stacked:true}}}});
+ }
+ if(h==='kpi'){
+  mk('cN',{type:'bar',data:{labels:NIPT.y,datasets:[{label:'건',data:NIPT.v,backgroundColor:NIPT.y.map(y=>y.includes('Q')||y.includes('H')?c3:c1)}]},options:{...O,plugins:{legend:{display:false}}}});
+  mk('cI',{type:'bar',data:{labels:ICS.y,datasets:[{label:'건',data:ICS.v,backgroundColor:ICS.y.map(y=>y.includes('Q')||y.includes('H')?c3:c2)}]},options:{...O,plugins:{legend:{display:false}}}});
+ }
+
+ if(h==='tech'){
+  const xs=[];for(let i=80;i<=260;i+=4)xs.push(i);
+  const g=(x,m,s)=>Math.exp(-((x-m)**2)/(2*s*s));
+  mk('cFrag',{type:'line',data:{labels:xs,datasets:[{label:'정상 cfDNA',data:xs.map(x=>+(g(x,167,14)+0.15*g(x,333/2+0,40)).toFixed(3)),borderColor:c1,pointRadius:0,tension:.4},{label:'암 유래 cfDNA',data:xs.map(x=>+(0.75*g(x,145,18)+0.1*g(x,167,14)).toFixed(3)),borderColor:c5,pointRadius:0,tension:.4,borderDash:[5,4]}]},options:{...O,scales:{x:{title:{display:true,text:'조각 길이(bp)'},ticks:{maxTicksLimit:8}},y:{title:{display:true,text:'비율(개념)'},ticks:{display:false}}}}});
+  const ppv=(se,sp,pv)=>se*pv/(se*pv+(1-sp)*(1-pv))*100;
+  mk('cPPV',{type:'bar',data:{labels:['아이캔서치','PancSight(췌장)','Shield(가던트)','Galleri(Grail)'],datasets:[{label:'민감도(%)',data:[84.5,87.5,83,37.5],backgroundColor:c1},{label:'특이도(%)',data:[94.5,95.4,90,99.85],backgroundColor:c3},{label:'PPV @0.8%(%)',data:[ppv(.845,.945,.008),ppv(.875,.954,.008),ppv(.83,.90,.008),ppv(.375,.9985,.008)].map(v=>+v.toFixed(1)),backgroundColor:c2}]},options:{...O,scales:{y:{max:100}}}});
+ }
+ if(h==='peer'){
+  const fx=1400;const pr=PEERS.map(p=>({n:p.n,ps:+p.ps.toFixed(1),opm:+(p.opm*100).toFixed(0)}));
+  const col=pr.map(p=>p.n==='지씨지놈'?css('--up'):c1);
+  mk('cPS',{type:'bar',data:{labels:pr.map(p=>p.n),datasets:[{data:pr.map(p=>p.ps),backgroundColor:col}]},options:{...O,indexAxis:'y',plugins:{legend:{display:false}}}});
+  mk('cOPM',{type:'bar',data:{labels:pr.map(p=>p.n),datasets:[{data:pr.map(p=>Math.max(p.opm,-120)),backgroundColor:col}]},options:{...O,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>pr[c.dataIndex].opm+'%'}}},scales:{x:{ticks:{callback:v=>v+'%'}}}}});
+ }
+ if(h==='us') mk('cJ',{type:'bar',data:{labels:JP.q,datasets:[{label:'억원',data:JP.v,backgroundColor:JP.q.map(q=>q.includes('E')?c2+'99':c2)}]},options:{...O,plugins:{legend:{display:false}}}});
+ if(h==='val') mk('cV',{type:'bar',data:{labels:['Bear','현재가','Base','Bull'],datasets:[{data:[5500,PX,8800,12200],backgroundColor:[css('--down'),c6(),c1,css('--up')]}]},options:{...O,indexAxis:'y',plugins:{legend:{display:false}}}});
+ if(h==='px') drawPx(0);
+}
+function c6(){return css('--c6')}
+function drawPx(n){
+ if(!P)return;const L=P.d.length,s=n?L-n:0;
+ const lab=P.d.slice(s),gc=P.gc.slice(s);
+ mk('cP',{type:'line',data:{labels:lab,datasets:[{label:'지씨지놈',data:gc,borderColor:css('--c1'),pointRadius:0,borderWidth:1.6,spanGaps:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:8}}}}});
+ const base=(a)=>{const f=a.find(x=>x!=null);return a.map(x=>x==null?null:+(x/f*100).toFixed(1))};
+ mk('cR',{type:'line',data:{labels:P.d,datasets:[['지씨지놈',P.gc,'--c1'],['쓰리빌리언',P.tb,'--c4'],['펌텍코리아',P.pt,'--c2']].map(([n,a,c])=>({label:n,data:base(a),borderColor:css(c),pointRadius:0,borderWidth:1.4,spanGaps:true}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10}}},scales:{x:{ticks:{maxTicksLimit:8}}}}});
+}
+$('#theme').onclick=()=>{const r=document.documentElement;const cur=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.dataset.theme=cur==='dark'?'light':'dark';nav()};
+build();window.addEventListener('hashchange',nav);nav();
+</script>
+</body>
+</html>

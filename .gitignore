@@ -1,0 +1,3 @@
+*.part
+*.json
+.DS_Store
