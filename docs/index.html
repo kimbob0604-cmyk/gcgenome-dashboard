@@ -102,7 +102,7 @@ const PX=7740, SH=2365.08, NETCASH=430;           // 11/24 종가(Yahoo), 주식
 const MC=PX*SH/1e4;                                // 억원
 const Q=[ // 분기 실적: 삼성증권 1Q25~2Q26, 키움 3Q26
  {q:'1Q25',rev:68,op:-0.3,ni:3},{q:'2Q25',rev:78,op:2.9,ni:-1},{q:'3Q25',rev:88,op:7.7,ni:14},{q:'4Q25',rev:81,op:2.0,ni:24},
- {q:'1Q26',rev:74,op:1.4,ni:8},{q:'2Q26',rev:83,op:4.3,ni:8},{q:'3Q26',rev:89,op:8.5,ni:2.6}];
+ {q:'1Q26',rev:74,op:1.4,ni:8},{q:'2Q26',rev:83,op:4.3,ni:8},{q:'3Q26',rev:89.4,op:8.5,ni:2.6}];
 const SEG={q:['1Q25','2Q25','3Q25','4Q25','1Q26','2Q26'],
  산과:[19,21,23,22,22,22],암검사:[26,30,32,29,30,30],유전희귀:[14,11,15,14,14,16],검진:[8,16,18,16,9,15]};
 const Y=[{y:'2023',rev:273,op:2},{y:'2024',rev:259,op:-12},{y:'2025',rev:315,op:12},{y:'2026E',rev:347,op:28,e:1},{y:'2027E',rev:410,op:41,e:1}];
@@ -157,7 +157,7 @@ function build(){
  H+=`<section class="page" id="fin"><div class="page-head"><h1>실적</h1><p>억원, 연결. 1Q25~2Q26 삼성증권(Quantiwise), 3Q26 키움(11/20). 3Q26은 분기보고서(11/16)</p></div>
  <div class="two">${card('분기 매출과 영업이익률','',`<div class="ch-box"><canvas id="cQ"></canvas></div>`)}
  ${card('연간 매출·영업이익','2026E 키움, 2027E 내 추정(매출 +18%, OPM 10%)',`<div class="ch-box"><canvas id="cY"></canvas></div>`)}</div>
- ${card('외울 숫자','YoY는 같은 분기 비교',`<div class="tw"><table><thead><tr><th>분기</th><th class="n">매출</th><th class="n">YoY</th><th class="n">영업이익</th><th class="n">OPM</th><th class="n">순이익</th></tr></thead><tbody>${Q.map((r,i)=>{const p=i>=4?Q[i-4]:null;const y=p?(r.rev/p.rev-1)*100:null;return `<tr><td>${r.q}</td><td class="n">${nf(r.rev)}</td><td class="n ${cls(y)}">${pc(y)}</td><td class="n">${nf(r.op,1)}</td><td class="n">${nf(r.op/r.rev*100,1)}%</td><td class="n">${r.ni==null?'미확인':nf(r.ni)}</td></tr>`}).join('')}
+ ${card('외울 숫자','YoY는 같은 분기 비교',`<div class="tw"><table><thead><tr><th>분기</th><th class="n">매출</th><th class="n">YoY</th><th class="n">영업이익</th><th class="n">OPM</th><th class="n">순이익</th></tr></thead><tbody>${Q.map((r,i)=>{const p=i>=4?Q[i-4]:null;const y=p?(r.rev/p.rev-1)*100:null;return `<tr><td>${r.q}</td><td class="n">${nf(r.rev)}</td><td class="n ${cls(y)}">${pc(y)}</td><td class="n">${nf(r.op,1)}</td><td class="n">${nf(r.op/r.rev*100,1)}%</td><td class="n">${r.ni==null?'미확인':nf(r.ni,Number.isInteger(r.ni)?0:1)}</td></tr>`}).join('')}
  <tr><td><b>2025</b></td><td class="n"><b>315</b></td><td class="n up">+22%</td><td class="n"><b>12</b></td><td class="n">3.8%</td><td class="n"><b>40</b></td></tr>
  <tr><td><b>최근 4분기</b></td><td class="n"><b>${nf(ttmRev)}</b></td><td></td><td class="n"><b>${nf(ttmOp)}</b></td><td class="n">${nf(ttmOp/ttmRev*100,1)}%</td><td></td></tr></tbody></table></div>
  <div class="note" style="margin-top:10px">3Q26 매출 +1.2% YoY에 그친 건 리스크스크린·지놈헬스 재출시가 7월→9월로 밀려 약 10억이 4Q26로 넘어갔기 때문(키움). 하반기 검진 성수기 계절성이 있어 4Q가 가장 큼.</div>`)}
